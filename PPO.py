@@ -4,6 +4,7 @@ import gymnasium as gym
 from gymnasium import spaces
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 import matplotlib.pyplot as plt
 
 # Parameters
@@ -23,7 +24,7 @@ class QubeServo2Env(gym.Env):
     def __init__(self):
         super().__init__()
         self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(4,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
         self.state = None
         self.dt = 0.02  # 50 Hz
         self.max_steps = 500  # 10 seconds
@@ -33,7 +34,8 @@ class QubeServo2Env(gym.Env):
         super().reset(seed=seed)
         self.state = np.array([0.0, 0.0, np.pi + np.random.uniform(-0.1, 0.1), 0.0], dtype=np.float32)
         self.step_count = 0
-        return self.state, {}
+        # Return only [theta, alpha]
+        return self.state[[0, 2]], {}
 
     def step(self, action):
         torque_value = np.clip(action[0], -1.0, 1.0)
@@ -64,15 +66,17 @@ class QubeServo2Env(gym.Env):
         done = abs(self.state[2] - np.pi) > np.pi / 2 or self.step_count >= self.max_steps
         truncated = self.step_count >= self.max_steps
 
-        return self.state, reward, done, truncated, {}
+        # Return only [theta, alpha]
+        return self.state[[0, 2]], reward, done, truncated, {}
 
     def render(self, mode='human'):
         pass
 
 
-# Verify environment
-env = QubeServo2Env()
-check_env(env)
+# Train with frame stacking
+env = DummyVecEnv([lambda: QubeServo2Env()])
+env = VecFrameStack(env, n_stack=4)  # Stack 4 frames
+#check_env(env)
 
 # Train PPO
 model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.0003, n_steps=2048)
@@ -85,24 +89,26 @@ obs, _ = env.reset()
 rewards = []
 thetas = []
 alphas = []
+torques = []
 times = []
 
 for i in range(1000):
-    action, _states = model.predict(obs, deterministic=True)
+    action, _states = model.predict(np.tile(obs, (4, 1)), deterministic=True)  # Tile to match stacked input
     obs, reward, done, truncated, _ = env.step(action)
     rewards.append(reward)
     thetas.append(obs[0])
-    alphas.append(obs[2])
+    alphas.append(obs[1])
+    torques.append(action[0])
     times.append(i * env.dt)
     # print(f"Step {i}: Theta = {obs[0]:.3f}, Alpha = {obs[2]:.3f}, Torque = {action[0]:.3f}, Reward = {reward:.3f}")
     if done or truncated:
         obs, _ = env.reset()
 
 # Plotting
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(12, 10))
 
 # Angles
-plt.subplot(2, 1, 1)
+plt.subplot(3, 1, 1)
 plt.plot(times, thetas, label=r'$\theta$ (arm angle)')
 plt.plot(times, alphas, label=r'$\alpha$ (pendulum angle)')
 plt.axhline(y=np.pi, color='r', linestyle='--', label=r'$\alpha = \pi$ (upright)')
@@ -112,12 +118,20 @@ plt.legend()
 plt.grid(True)
 
 # Reward
-plt.subplot(2, 1, 2)
+plt.subplot(3, 1, 2)
 plt.plot(times, rewards, label='Reward')
 plt.xlabel('Time (s)')
 plt.ylabel('Reward')
 plt.legend()
 plt.grid(True)
 
-plt.tight_layout()
+# Torque
+plt.subplot(3, 1, 3)
+plt.plot(times, torques, label='Torque')
+plt.xlabel('Time (s)')
+plt.ylabel('Torque (N·m)')
+plt.legend()
+plt.grid(True)
+
+#plt.tight_layout()
 plt.show()

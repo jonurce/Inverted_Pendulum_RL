@@ -3,6 +3,10 @@ import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 
+import gymnasium as gym
+from gymnasium import spaces
+from stable_baselines3 import PPO
+
 
 # Parameters (approximate values from QUBE-Servo 2 specs)
 m_p = 0.024  # Pendulum mass (kg)
@@ -15,9 +19,14 @@ g = 9.81  # Gravity (m/s²)
 b_a = 0.001  # Viscous friction coefficient for arm (N·m·s/rad)
 b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
 
+# Load the saved model
+model = PPO.load("qube_servo2_ppo")
+
 # Motor torque (set to 0 for free motion; can be a function of time or control input)
 def torque(t,theta,alpha):
-    return np.sin(t)*0.1
+    obs = np.array([theta, alpha], dtype=np.float32)
+    action, _states = model.predict(obs, deterministic=True)
+    return action[0]
 
 # System dynamics
 def dynamics(t, x):
