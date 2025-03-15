@@ -16,8 +16,8 @@ b_a = 0.001  # Viscous friction coefficient for arm (N·m·s/rad)
 b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
 
 # Motor torque (set to 0 for free motion; can be a function of time or control input)
-def torque(t):
-    return 0.0
+def torque(t,theta,alpha):
+    return np.sin(t)*0.1
 
 # System dynamics
 def dynamics(t, x):
@@ -31,7 +31,7 @@ def dynamics(t, x):
 
     # Right-hand side
     f = np.array([
-       torque(t) + m_p * L_a * L_p * np.sin(x3) * x4**2 + m_p*L_a*L_p*np.sin(x3)*x2**2*np.cos(2*x1) - 2*L_p*x3*x2*np.cos(x3)*np.cos(x1)*m_p*L_a*np.sin(x1) - b_a*x2,
+       torque(t,x1,x3) + m_p * L_a * L_p * np.sin(x3) * x4**2 + m_p*L_a*L_p*np.sin(x3)*x2**2*np.cos(2*x1) - 2*L_p*x3*x2*np.cos(x3)*np.cos(x1)*m_p*L_a*np.sin(x1) - b_a*x2,
         -2*m_p*g*L_p*np.sin(x3) + m_p*L_p**2*x2**2*np.sin(x3)*np.cos(x3)*np.cos(2*x1) - 2*m_p*L_p**2*x2*x4*np.cos(x3)**2*np.sin(x1)*np.cos(x1) - b_p*x4,
     ])
 
