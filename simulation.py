@@ -20,12 +20,20 @@ b_a = 0.001  # Viscous friction coefficient for arm (N·m·s/rad)
 b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
 
 # Load the saved model
-model = PPO.load("qube_servo2_ppo")
+model = PPO.load("pendulum_ppo_angles_loss_stop.zip")
+
+# Initialize frame history globally (4 frames of [theta, alpha])
+initial_angles = np.array([0.0, np.pi/3], dtype=np.float32)  # Match x0 angles
+frame_history = [initial_angles] * 8  # Initialize with 8 frames
 
 # Motor torque (set to 0 for free motion; can be a function of time or control input)
 def torque(t,theta,alpha):
+    global frame_history
     obs = np.array([theta, alpha], dtype=np.float32)
-    action, _states = model.predict(obs, deterministic=True)
+    frame_history.pop(0)
+    frame_history.append(obs)
+    stacked_obs = np.stack(frame_history, axis=0).flatten()  # Shape (16,) - 8 frames x 2 angles
+    action, _states = model.predict(stacked_obs, deterministic=True)
     return action[0]
 
 # System dynamics
