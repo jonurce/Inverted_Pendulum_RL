@@ -51,7 +51,7 @@ class QubeServo2Env(gym.Env):
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
         self.state = None
         self.dt = 0.01
-        self.max_steps = 500
+        self.max_steps = 1000
         self.step_count = 0
 
     def reset(self, seed=None, options=None):
@@ -91,14 +91,14 @@ class QubeServo2Env(gym.Env):
         alpha_dot = dyn[2]
         alpha_ddot = dyn[3]
         reward = (
-            - 2*(np.pi - alpha)**2
-            - 0.1 * theta**2
+            - 2*(np.pi - abs(alpha))**2
+            - 0.5 * theta**2
             - 0.01 * torque_value**2
-            - 0.005 * (theta_dot**2 + alpha_dot**2)
-            - 0.005 * (theta_ddot**2 + alpha_ddot**2)
+            - 0.0005 * (theta_dot**2 + alpha_dot**2)
+            - 0.0005 * (theta_ddot**2 + alpha_ddot**2)
         )
         self.step_count += 1
-        done = abs(theta) > np.pi / 2 or self.step_count >= self.max_steps
+        done = abs(theta) > 5 * np.pi / 6 or self.step_count >= self.max_steps
         truncated = self.step_count >= self.max_steps
         return self.state[[0, 2]], reward, done, truncated, {}
 
@@ -109,7 +109,7 @@ env = VecFrameStack(env, n_stack=8)
 # Train PPO
 model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.00003, n_steps=2048, clip_range_vf=0.2)
 callback = LossTrackingCallback(check_freq=5000, patience=10, loss_threshold=0.05, verbose=1)
-model.learn(total_timesteps=10000000, callback=callback)
+model.learn(total_timesteps=100000, callback=callback)
 model.save("pendulum_ppo_angles_loss_stop")
 
 # Test and collect data
@@ -144,8 +144,8 @@ plt.subplot(3, 1, 1)
 plt.plot(times, thetas, label=r'$\theta$ (arm angle)')
 plt.plot(times, alphas, label=r'$\alpha$ (pendulum angle)')
 plt.axhline(y=np.pi, color='r', linestyle='--', label=r'$\alpha = \pi$ (upright)')
-plt.axhline(y=np.pi/2, color='k', linestyle='--', label=r'$\theta$ limit')
-plt.axhline(y=-np.pi/2, color='k', linestyle='--')
+plt.axhline(y=5*np.pi/6, color='k', linestyle='--', label=r'$\theta$ limit')
+plt.axhline(y=-5*np.pi/6, color='k', linestyle='--')
 plt.xlabel('Time (s)')
 plt.ylabel('Angle (rad)')
 plt.legend()
