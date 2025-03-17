@@ -47,7 +47,8 @@ class LossTrackingCallback(BaseCallback):
 class QubeServo2Env(gym.Env):
     def __init__(self):
         super().__init__()
-        self.action_space = spaces.Box(low=-0.3, high=0.3, shape=(1,), dtype=np.float32)
+        self.action_limit = 0.005
+        self.action_space = spaces.Box(low=-self.action_limit, high=self.action_limit, shape=(1,), dtype=np.float32)
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(4,), dtype=np.float32)  # Full state
         self.state = None
         self.dt = 0.01
@@ -61,7 +62,8 @@ class QubeServo2Env(gym.Env):
         return self.state, {}  # Return full state: [theta, theta_dot, alpha, alpha_dot]
 
     def step(self, action):
-        torque_value = np.clip(action[0], -0.3, 0.3)
+        #torque_value = np.clip(action[0], -self.action_limit, self.action_limit)
+        torque_value = action[0]
         def dynamics(t, x):
             x1, x2, x3, x4 = x
             x2 = np.clip(x2, -5, 5)
@@ -93,10 +95,10 @@ class QubeServo2Env(gym.Env):
         reward = (
             - (np.pi - abs(alpha))**2
             - theta**2
-            - 500*torque_value**2
-            + 0.4 * (theta_dot**2 + alpha_dot**2)
+            - (500*torque_value)**2
+            + 0.1 * (theta_dot**2 + alpha_dot**2)
             #- 0.0005 * (theta_ddot**2 + alpha_ddot**2)
-        )/15
+        )/5
         self.step_count += 1
         done = abs(theta) > 2 * np.pi / 3 or self.step_count >= self.max_steps
         truncated = self.step_count >= self.max_steps
@@ -109,7 +111,7 @@ env = VecFrameStack(env, n_stack=8)  # Now stacks 4D states: 4 × 8 = 32D
 # Train PPO
 model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.0001, n_steps=2048)
 callback = LossTrackingCallback(check_freq=5000, patience=10, loss_threshold=0.05, verbose=1)
-model.learn(total_timesteps=500000, callback=callback)
+model.learn(total_timesteps=100000, callback=callback)
 model.save("pendulum_ppo_angles_loss_stop")
 
 # Test and collect data

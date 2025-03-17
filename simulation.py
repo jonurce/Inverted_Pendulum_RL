@@ -23,18 +23,18 @@ b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
 model = PPO.load("pendulum_ppo_angles_loss_stop.zip")
 
 # Initialize frame history globally (4 frames of [theta, alpha])
-initial_angles = np.array([0.0, np.pi/3], dtype=np.float32)  # Match x0 angles
+initial_angles = np.array([0.0, 0.0, np.pi/3, 0.0], dtype=np.float32)  # Match x0 angles
 frame_history = [initial_angles] * 8  # Initialize with 8 frames
 
 # Motor torque (set to 0 for free motion; can be a function of time or control input)
 def torque(t,theta,alpha):
     global frame_history
-    obs = np.array([theta, alpha], dtype=np.float32)
+    obs = np.array([theta, 0.0, alpha, 0.0], dtype=np.float32)
     frame_history.pop(0)
     frame_history.append(obs)
-    stacked_obs = np.stack(frame_history, axis=0).flatten()  # Shape (16,) - 8 frames x 2 angles
+    stacked_obs = np.stack(frame_history, axis=0).flatten()  # Shape (32,) - 8 frames x 4 angles
     action, _states = model.predict(stacked_obs, deterministic=True)
-    return action[0]
+    return 0.003
 
 # System dynamics
 def dynamics(t, x):
@@ -66,8 +66,8 @@ def dynamics(t, x):
 x0 = [0.0, 0.0, np.pi/3, 0.0]
 
 # Time span
-t_span = (0, 10)  # 5 seconds
-t_eval = np.linspace(0, 10, 1000)
+t_span = (0, 4)  # 5 seconds
+t_eval = np.linspace(0, 4, 1000)
 
 # Solve ODE
 sol = solve_ivp(dynamics, t_span, x0, t_eval=t_eval, method='RK45')
