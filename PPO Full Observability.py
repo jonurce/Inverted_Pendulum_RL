@@ -93,8 +93,8 @@ class QubeServo2Env(gym.Env):
         alpha_dot = dyn[2]
         alpha_ddot = dyn[3]
         reward = (
-            - (np.pi - abs(alpha))**2
-            - theta**2
+            - 2*(np.pi - abs(alpha))**2
+            - 0.5*theta**2
             - (500*torque_value)**2
             + 0.1 * (theta_dot**2 + alpha_dot**2)
             #- 0.0005 * (theta_ddot**2 + alpha_ddot**2)

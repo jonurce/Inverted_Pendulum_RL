@@ -17,7 +17,7 @@ L_a = 0.085  # Arm length (m)
 I_a = 0.000534  # Arm inertia about pivot (kg·m²)
 g = 9.81  # Gravity (m/s²)
 b_a = 0.001  # Viscous friction coefficient for arm (N·m·s/rad)
-b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
+b_p = 0.00005  # Viscous friction coefficient for pendulum (N·m·s/rad)
 
 # Load the saved model
 model = PPO.load("pendulum_ppo_angles_loss_stop.zip")
@@ -34,7 +34,11 @@ def torque(t,theta,alpha):
     frame_history.append(obs)
     stacked_obs = np.stack(frame_history, axis=0).flatten()  # Shape (32,) - 8 frames x 4 angles
     action, _states = model.predict(stacked_obs, deterministic=True)
-    return 0.003
+    if t < 0.1:
+        return -2
+    elif t < 0.2:
+        return 0.0
+    return 0.0
 
 # System dynamics
 def dynamics(t, x):
@@ -63,11 +67,11 @@ def dynamics(t, x):
 
 # Initial conditions: [theta, theta_dot, alpha, alpha_dot]
 # Start with pendulum near upright (alpha ≈ π) and small perturbation
-x0 = [0.0, 0.0, np.pi/3, 0.0]
+x0 = [0.0, 0.0, 0.0, 0.0]
 
 # Time span
-t_span = (0, 4)  # 5 seconds
-t_eval = np.linspace(0, 4, 1000)
+t_span = (0, 20)  # 5 seconds
+t_eval = np.linspace(0, 20, 5000)
 
 # Solve ODE
 sol = solve_ivp(dynamics, t_span, x0, t_eval=t_eval, method='RK45')

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Improving PPO">
+    <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Tuning PPO - Not Working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PPO Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/PPO Full Observability.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
@@ -91,7 +91,9 @@
       <workItem from="1741879738289" duration="5000" />
       <workItem from="1742048016401" duration="23194000" />
       <workItem from="1742113404785" duration="39882000" />
-      <workItem from="1742202615801" duration="3415000" />
+      <workItem from="1742202615801" duration="3604000" />
+      <workItem from="1742218048125" duration="473000" />
+      <workItem from="1742299295970" duration="3762000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -157,7 +159,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742163984835</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Tuning PPO - Not Working">
+      <option name="closed" value="true" />
+      <created>1742206106380</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1742206106380</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,12 +178,13 @@
     <MESSAGE value="Simulation" />
     <MESSAGE value="Trying PPO" />
     <MESSAGE value="Improving PPO" />
-    <option name="LAST_COMMIT_MESSAGE" value="Improving PPO" />
+    <MESSAGE value="Tuning PPO - Not Working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tuning PPO - Not Working" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/AIS4002_DRL$install.coverage" NAME="install Coverage Results" MODIFIED="1741268430694" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Partial_Observability.coverage" NAME="PPO Partial Observability Coverage Results" MODIFIED="1742146749225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1742203730339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1742309996268" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO.coverage" NAME="PPO Coverage Results" MODIFIED="1742145621879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Tutorial.coverage" NAME="PPO-Tutorial Coverage Results" MODIFIED="1742114031984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Full_Observability.coverage" NAME="PPO Full Observability Coverage Results" MODIFIED="1742205624659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
