@@ -7,16 +7,16 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 from stable_baselines3.common.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 
-# Parameters
-m_p = 0.024
-L_p = 0.129
-I_p = 0.0000995
-m_a = 0.094
-L_a = 0.085
-I_a = 0.000534
-g = 9.81
-b_a = 0.003
-b_p = 0.0005
+# Parameters (approximate values from QUBE-Servo 2 specs)
+m_p = 0.024  # Pendulum mass (kg)
+L_p = 0.128  # Pendulum length to CoM (m)
+I_p = 0.000131  # Pendulum inertia about pivot (kg·m²)
+m_a = 0.053  # Arm mass (kg)
+L_a = 0.086  # Arm length (m)
+I_a = 0.0000572  # Arm inertia about pivot (kg·m²)
+g = 9.81  # Gravity (m/s²)
+b_a = 0.0003  # Viscous friction coefficient for arm (N·m·s/rad)
+b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
 
 class LossTrackingCallback(BaseCallback):
     def __init__(self, check_freq=1000, patience=10, loss_threshold=0.01, verbose=1):
@@ -66,15 +66,21 @@ class QubeServo2Env(gym.Env):
             x1, x2, x3, x4 = x
             x2 = np.clip(x2, -5, 5)
             x4 = np.clip(x4, -5, 5)
+            # Based on Euler-Lagrange differential equation (copied from document)
+            # Mass matrix (left-hand side)
             M = np.array([
-                [I_a + m_p * L_a**2 + 2*m_p*L_a*L_p*np.sin(x3)*np.sin(x1)*np.cos(x1), m_p * L_a * L_p * np.cos(x3)],
-                [m_p*L_a*L_p*np.cos(x3) + 2*m_p*(L_p**2)*np.sin(x3)*np.cos(x3)*np.sin(x1)*np.cos(x1), I_p + m_p*L_p**2]
+                [m_p * L_a ** 2 + 0.25 * m_p * L_p ** 2 - 0.25 * m_p * L_p ** 2 * np.cos(x3) ** 2 + I_a,
+                 -0.5 * m_p * L_a * L_p * np.cos(x3)],
+                [0.5 * m_p * L_a * L_p * np.cos(x3),
+                 I_p + 0.25 * m_p * L_p ** 2],
             ])
+
+            # Right-hand side
             f = np.array([
-                torque_value + m_p * L_a * L_p * np.sin(x3) * x4**2 + m_p*L_a*L_p*np.sin(x3)*x2**2*np.cos(2*x1) -
-                2*L_p*x3*x2*np.cos(x3)*np.cos(x1)*m_p*L_a*np.sin(x1) - b_a*x2,
-                -2*m_p*g*L_p*np.sin(x3) + m_p*L_p**2*x2**2*np.sin(x3)*np.cos(x3)*np.cos(2*x1) -
-                2*m_p*L_p**2*x2*x4*np.cos(x3)**2*np.sin(x1)*np.cos(x1) - b_p*x4
+                torque_value - b_a * x2 - 0.5 * m_p * L_a * L_p * np.sin(
+                    x3) * x4 ** 2 - 0.5 * m_p * L_p ** 2 * np.sin(x3) * np.cos(x3) * x2 * x4,
+                -b_p * x4 - 0.5 * m_p * g * L_p * np.sin(x3) + 0.25 * m_p * L_p ** 2 * x2 ** 2 * np.sin(x3) * np.cos(
+                    x3),
             ])
             acc = np.linalg.solve(M, f)
             acc[0] = np.clip(acc[0], -5, 5)
