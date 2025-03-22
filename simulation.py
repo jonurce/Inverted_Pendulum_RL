@@ -23,7 +23,7 @@ R_m = 8.94
 
 # Motor voltage (set to 0 for free motion; can be a function of time or control input)
 def voltage(t,s0, c0, s1, c1):
-    return 1.0
+    return 0.0
 
 # System dynamics
 def dynamics(t, x):
@@ -47,18 +47,15 @@ def dynamics(t, x):
     ])
 
     # Solve for accelerations: M * [theta_ddot, alpha_ddot] = f
-    accelerations = np.linalg.solve(M, f)
-    dd0 = accelerations[0]
-    dd1 = accelerations[1]
+    acc = np.linalg.solve(M, f)
 
     # State derivatives
-    dxdt = [d0*c0, -d0*s0, dd0, d1*c1, -d1*s1, dd1]
-    return dxdt
+    return [d0*c0, -d0*s0, acc[0], d1*c1, -d1*s1, acc[1]]
 
 # Initial conditions: [theta, theta_dot, alpha, alpha_dot]
 # Start with pendulum near upright (alpha ≈ π) and small perturbation
 theta_0 = 0.0
-theta_1 = 0.1
+theta_1 = 1.0
 x0 = [np.sin(theta_0), np.cos(theta_0), 0.0, np.sin(theta_1), np.cos(theta_1), 0.0]
 
 # Time span
@@ -72,11 +69,11 @@ sol = solve_ivp(dynamics, t_span, x0, t_eval=t_eval, method='RK45')
 # Extract results
 s0 = sol.y[0]
 c0 = sol.y[1]
-theta = np.arctan2(s0, c0)
+theta = np.arcsin(s0)
 theta_dot = sol.y[2]
 s1 = sol.y[3]
 c1 = sol.y[4]
-alpha = np.arctan2(s1, c1)
+alpha = np.arccos(c1)
 alpha_dot = sol.y[5]
 t = sol.t
 

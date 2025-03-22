@@ -8,15 +8,17 @@ from stable_baselines3.common.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 
 # Parameters (approximate values from QUBE-Servo 2 specs)
-m_p = 0.024  # Pendulum mass (kg)
-L_p = 0.128  # Pendulum length to CoM (m)
-I_p = 0.000131  # Pendulum inertia about pivot (kg·m²)
-m_a = 0.053  # Arm mass (kg)
-L_a = 0.086  # Arm length (m)
-I_a = 0.0000572  # Arm inertia about pivot (kg·m²)
+m_1 = 0.024  # Pendulum mass (kg)
+l_1 = 0.128  # Pendulum length to CoM (m)
+I_1 = 0.000131  # Pendulum inertia about pivot (kg·m²)
+m_0 = 0.053  # Arm mass (kg)
+L_0 = 0.086  # Arm length (m)
+I_0 = 0.0000572  # Arm inertia about pivot (kg·m²)
 g = 9.81  # Gravity (m/s²)
-b_a = 0.0003  # Viscous friction coefficient for arm (N·m·s/rad)
-b_p = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
+b_0 = 0.0003  # Viscous friction coefficient for arm (N·m·s/rad)
+b_1 = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
+K_m = 0.0431
+R_m = 8.94
 
 class LossTrackingCallback(BaseCallback):
     def __init__(self, check_freq=1000, patience=10, loss_threshold=0.01, verbose=1):
@@ -47,9 +49,9 @@ class LossTrackingCallback(BaseCallback):
 class QubeServo2Env(gym.Env):
     def __init__(self):
         super().__init__()
-        self.action_limit = 0.01
+        self.action_limit = 10.0
         self.action_space = spaces.Box(low=-self.action_limit, high=self.action_limit, shape=(1,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(4,), dtype=np.float32)  # Full state
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float32)  # Full state
         self.state = None
         self.dt = 0.01
         self.max_steps = 1000
@@ -57,90 +59,104 @@ class QubeServo2Env(gym.Env):
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-        self.state = np.array([0.0, 0.0, np.random.uniform(-5*np.pi/6, 5*np.pi/6), 0.0], dtype=np.float32)
+        s1 = np.random.uniform(-1, 1)
+        self.state = np.array([0.0, 0.0, 0.0, s1, 1-s1^2, 0.0], dtype=np.float32)
         self.step_count = 0
         return self.state, {}  # Return full state: [theta, theta_dot, alpha, alpha_dot]
 
     def step(self, action):
-        torque_value = np.clip(action[0], -self.action_limit, self.action_limit)
+        voltage = np.clip(action[0], -self.action_limit, self.action_limit)
+        torque = K_m * (voltage - K_m * self.state[2]) / R_m
         def dynamics(t, x):
-            x1, x2, x3, x4 = x
-            #x2 = np.clip(x2, -5, 5)
-            #x4 = np.clip(x4, -5, 5)
-            # Based on Euler-Lagrange differential equation (copied from document)
+            s0, c0, d0, s1, c1, d1 = x
+
+            # Based on Euler-Lagrange differential equation
             # Mass matrix (left-hand side)
             M = np.array([
-                [m_p * L_a ** 2 + 0.25 * m_p * L_p ** 2 - 0.25 * m_p * L_p ** 2 * np.cos(x3) ** 2 + I_a,
-                 -0.5 * m_p * L_a * L_p * np.cos(x3)],
-                [0.5 * m_p * L_a * L_p * np.cos(x3),
-                 I_p + 0.25 * m_p * L_p ** 2],
+                [m_1 * L_0 ** 2 + m_1 * l_1 ** 2 * s1 ** 2 + I_0,
+                 +m_1 * L_0 * l_1 * c1],
+                [m_1 * L_0 * l_1 * c1,
+                 I_1 + m_1 * l_1 ** 2],
             ])
 
             # Right-hand side
             f = np.array([
-                torque_value - b_a * x2 - 0.5 * m_p * L_a * L_p * np.sin(
-                    x3) * x4 ** 2 - 0.5 * m_p * L_p ** 2 * np.sin(x3) * np.cos(x3) * x2 * x4,
-                -b_p * x4 - 0.5 * m_p * g * L_p * np.sin(x3) + 0.25 * m_p * L_p ** 2 * x2 ** 2 * np.sin(x3) * np.cos(
-                    x3),
+                torque - b_0 * d0 + m_1 * L_0 * l_1 * s1 * d1 ** 2 - m_1 * l_1 ** 2 * s1 * c1 * d0 * d1,
+                -b_1 * d1 + m_1 * g * l_1 * s1 + m_1 * l_1 ** 2 * d0 ** 2 * s1 * c1,
             ])
+
             acc = np.linalg.solve(M, f)
-            #acc[0] = np.clip(acc[0], -5, 5)
-            #acc[1] = np.clip(acc[1], -5, 5)
-            return [x2, acc[0], x4, acc[1]]
+
+            return [d0*c0, -d0*s0, acc[0], d1*c1, -d1*s1, acc[1]]
         sol = solve_ivp(dynamics, [0, self.dt], self.state, method='RK45')
         self.state = sol.y[:, -1]
         dyn = dynamics(0, self.state)
-        dyn = np.clip(dyn, -5, 5)
-        theta = self.state[0]
-        theta_dot = dyn[0]
-        theta_ddot = dyn[1]
-        alpha = self.state[2]
-        alpha_dot = dyn[2]
-        alpha_ddot = dyn[3]
+
+        s0 = self.state[0]
+        c0 = self.state[1]
+        d0 = self.state[2]
+        dd0 = dyn[2]
+        s1 = self.state[3]
+        c1 = self.state[4]
+        d1 = self.state[5]
+        dd1 = dyn[5]
+
+        x_cm_dot = -L_0 * s0 * d0 - l_1 * c1 * d1 * s0 - l_1 * d0 * s1 * c0
+        y_cm_dot = L_0 * c0 * d0 + l_1 * c1 * d1 * c0 - l_1 * d0 * s1 * s0
+        z_cm_dot = -d1 * l_1 * s1
+        T = 0.5 * I_0 * d0 ** 2 + 0.5 * m_1 * (x_cm_dot ** 2 + y_cm_dot ** 2 + z_cm_dot ** 2) + 0.5 * I_1 * d1 ** 2
+        V = m_1 * g * l_1 * (c1 + 1)
+        E = T + V
+        E_r = 2 * m_1 * g * l_1
+
         reward = (
-            - (np.pi - abs(alpha))**2
-            - 0.5*theta**2
-             - 1500*abs(torque_value)
-             - 0.1 * (theta_dot**2 + alpha_dot**2)
-            - 0.05 * (theta_ddot**2 + alpha_ddot**2)
-        )/2
+            - abs(s1) - abs(c1-1)
+            #- 0.5*theta**2
+            # - 1500*abs(torque_value)
+            # - 0.1 * (theta_dot**2 + alpha_dot**2)
+            #- 0.05 * (theta_ddot**2 + alpha_ddot**2)
+            - (E - E_r)^2
+        )
         self.step_count += 1
-        done = abs(theta) > 2 * np.pi / 3 or self.step_count >= self.max_steps
+        #done = abs(theta) > 2 * np.pi / 3 or self.step_count >= self.max_steps
+        done = self.step_count >= self.max_steps
         truncated = self.step_count >= self.max_steps
         return self.state, reward, done, truncated, {}  # Return full state
 
 # Train with frame stacking
 env = DummyVecEnv([lambda: QubeServo2Env()])
-env = VecFrameStack(env, n_stack=8)  # Now stacks 4D states: 4 × 8 = 32D
+env = VecFrameStack(env, n_stack=8)  # Stacks 6D states: 6 × 8 = 48D
 
 # Train PPO
 model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.00005, n_steps=2048)
 callback = LossTrackingCallback(check_freq=5000, patience=10, loss_threshold=0.05, verbose=1)
-model.learn(total_timesteps=20000000, callback=callback)
-model.save("pendulum_ppo_angles_loss_stop")
+model.learn(total_timesteps=200000, callback=callback)
+model.save("pendulum_ppo")
 
 # Test and collect data
 env = QubeServo2Env()
 obs, _ = env.reset()
-frame_history = [obs] * 8  # obs is now 4D
+frame_history = [obs] * 8  # obs is now 6D
 rewards = []
 thetas = []
 alphas = []
-torques = []
+voltages = []
 times = []
 
 for i in range(1000):
-    stacked_obs = np.stack(frame_history, axis=0).flatten()  # 4 × 8 = 32D flattened
+    stacked_obs = np.stack(frame_history, axis=0).flatten()  # 6 × 8 = 48D flattened
     action, _states = model.predict(stacked_obs, deterministic=True)
     obs, reward, done, truncated, _ = env.step(action)
     frame_history.pop(0)
     frame_history.append(obs)
     rewards.append(reward)
-    thetas.append(obs[0])  # theta
-    alphas.append(obs[2])  # alpha
-    torques.append(action[0])
+
+    thetas.append(np.arctan2(obs[0],obs[1]))  # theta
+    alphas.append(np.arctan2(obs[3],obs[4]))  # alpha
+
+    voltages.append(action[0])
     times.append(i * env.dt)
-    print(f"Step {i}: Theta = {obs[0]:.3f}, Alpha = {obs[2]:.3f}, Torque = {action[0]:.3f}, Reward = {reward:.3f}")
+    print(f"Step {i}: Theta = {obs[0]:.3f}, Alpha = {obs[2]:.3f}, Voltage = {action[0]:.3f}, Reward = {reward:.3f}")
     if done or truncated:
         obs, _ = env.reset()
         frame_history = [obs] * 8
@@ -167,9 +183,9 @@ plt.legend()
 plt.grid(True)
 
 plt.subplot(3, 1, 3)
-plt.plot(times, torques, label='Torque')
+plt.plot(times, voltages, label='Torque')
 plt.xlabel('Time (s)')
-plt.ylabel('Torque (N·m)')
+plt.ylabel('Voltage (V)')
 plt.legend()
 plt.grid(True)
 
