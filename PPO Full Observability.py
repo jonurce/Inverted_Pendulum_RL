@@ -59,8 +59,8 @@ class QubeServo2Env(gym.Env):
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-        s1 = np.random.uniform(-1, 1)
-        self.state = np.array([0.0, 0.0, 0.0, s1, 1-s1^2, 0.0], dtype=np.float32)
+        alpha = np.random.uniform(-np.pi, np.pi)
+        self.state = np.array([0.0, 1.0, 0.0, np.sin(alpha), np.cos(alpha), 0.0], dtype=np.float32)
         self.step_count = 0
         return self.state, {}  # Return full state: [theta, theta_dot, alpha, alpha_dot]
 
@@ -71,7 +71,7 @@ class QubeServo2Env(gym.Env):
             s0, c0, d0, s1, c1, d1 = x
 
             # Based on Euler-Lagrange differential equation
-            # Mass matrix (left-hand side)
+            # Left-hand side
             M = np.array([
                 [m_1 * L_0 ** 2 + m_1 * l_1 ** 2 * s1 ** 2 + I_0,
                  +m_1 * L_0 * l_1 * c1],
@@ -110,12 +110,12 @@ class QubeServo2Env(gym.Env):
         E_r = 2 * m_1 * g * l_1
 
         reward = (
-            - abs(s1) - abs(c1-1)
-            #- 0.5*theta**2
+            -np.arctan2(s1,c1)**2
+            - 0.7*np.arctan2(s0,c0)**2
             # - 1500*abs(torque_value)
             # - 0.1 * (theta_dot**2 + alpha_dot**2)
             #- 0.05 * (theta_ddot**2 + alpha_ddot**2)
-            - (E - E_r)^2
+            #-(E-E_r)**2
         )
         self.step_count += 1
         #done = abs(theta) > 2 * np.pi / 3 or self.step_count >= self.max_steps
@@ -125,18 +125,18 @@ class QubeServo2Env(gym.Env):
 
 # Train with frame stacking
 env = DummyVecEnv([lambda: QubeServo2Env()])
-env = VecFrameStack(env, n_stack=8)  # Stacks 6D states: 6 × 8 = 48D
+env = VecFrameStack(env, n_stack=2)  # Stacks 6D states: 6 × 2 = 12D
 
 # Train PPO
-model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.00005, n_steps=2048)
-callback = LossTrackingCallback(check_freq=5000, patience=10, loss_threshold=0.05, verbose=1)
-model.learn(total_timesteps=200000, callback=callback)
+model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.0001, n_steps=2048)
+callback = LossTrackingCallback(check_freq=5000, patience=10, loss_threshold=0.01, verbose=1)
+model.learn(total_timesteps=400000, callback=callback)
 model.save("pendulum_ppo")
 
 # Test and collect data
 env = QubeServo2Env()
 obs, _ = env.reset()
-frame_history = [obs] * 8  # obs is now 6D
+frame_history = [obs] * 2  # obs is now 6D
 rewards = []
 thetas = []
 alphas = []
@@ -144,31 +144,29 @@ voltages = []
 times = []
 
 for i in range(1000):
-    stacked_obs = np.stack(frame_history, axis=0).flatten()  # 6 × 8 = 48D flattened
+    stacked_obs = np.stack(frame_history, axis=0).flatten()  # 6 × 2 = 12D flattened
     action, _states = model.predict(stacked_obs, deterministic=True)
     obs, reward, done, truncated, _ = env.step(action)
     frame_history.pop(0)
     frame_history.append(obs)
     rewards.append(reward)
-
-    thetas.append(np.arctan2(obs[0],obs[1]))  # theta
-    alphas.append(np.arctan2(obs[3],obs[4]))  # alpha
-
+    thetas.append(np.arctan2(obs[0],obs[1]))
+    alphas.append(np.arctan2(obs[3],obs[4]))
     voltages.append(action[0])
     times.append(i * env.dt)
-    print(f"Step {i}: Theta = {obs[0]:.3f}, Alpha = {obs[2]:.3f}, Voltage = {action[0]:.3f}, Reward = {reward:.3f}")
+    print(f"Step {i}: Theta = {np.arctan2(obs[0],obs[1]):.3f}, Alpha = {np.arctan2(obs[3],obs[4]):.3f}, Voltage = {action[0]:.3f}, Reward = {reward:.3f}")
     if done or truncated:
         obs, _ = env.reset()
-        frame_history = [obs] * 8
+        frame_history = [obs] * 2
 
 # Plotting results
 plt.figure(figsize=(12, 10))
 plt.subplot(3, 1, 1)
-plt.plot(times, thetas, label=r'$\theta$ (arm angle)')
-plt.plot(times, alphas, label=r'$\alpha$ (pendulum angle)')
-plt.axhline(y=np.pi, color='r', linestyle='--', label=r'$\alpha = +-\pi$ (upright)')
+plt.plot(times, thetas, label=r'$\theta_0$ (arm angle)')
+plt.plot(times, alphas, label=r'$\theta_1$ (pendulum angle)')
+plt.axhline(y=np.pi, color='r', linestyle='--', label=r'$\theta_1 = +-\pi$ (down)')
 plt.axhline(y=-np.pi, color='r', linestyle='--')
-plt.axhline(y=2*np.pi/3, color='k', linestyle='--', label=r'$\theta$ limit')
+plt.axhline(y=2*np.pi/3, color='k', linestyle='--', label=r'$\theta_0$ limits')
 plt.axhline(y=-2*np.pi/3, color='k', linestyle='--')
 plt.xlabel('Time (s)')
 plt.ylabel('Angle (rad)')

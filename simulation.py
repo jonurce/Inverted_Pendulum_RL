@@ -23,7 +23,7 @@ R_m = 8.94
 
 # Motor voltage (set to 0 for free motion; can be a function of time or control input)
 def voltage(t,s0, c0, s1, c1):
-    return 0.0
+    return 5.0
 
 # System dynamics
 def dynamics(t, x):
@@ -69,11 +69,11 @@ sol = solve_ivp(dynamics, t_span, x0, t_eval=t_eval, method='RK45')
 # Extract results
 s0 = sol.y[0]
 c0 = sol.y[1]
-theta = np.arcsin(s0)
+theta = np.arctan2(s0,c0)
 theta_dot = sol.y[2]
 s1 = sol.y[3]
 c1 = sol.y[4]
-alpha = np.arccos(c1)
+alpha = np.arctan2(s1,c1)
 alpha_dot = sol.y[5]
 t = sol.t
 
