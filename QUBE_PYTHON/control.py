@@ -1,7 +1,7 @@
 from PID import *
 
 # Arduino COM port
-COM_PORT = "COM8"
+COM_PORT = "COM9"
 
 # Using mac?
 USING_MAC = False
@@ -16,9 +16,7 @@ pid = PID()
 
 # Main function to control. Must return the voltage (control signal) to apply to the motor.
 def control_system(dt, motor_angle, pendulum_angle, rpm):
-    
-    
-    return 0
+    return 0.0
 
 
 # This function is used to tune the PID controller with the GUI.
