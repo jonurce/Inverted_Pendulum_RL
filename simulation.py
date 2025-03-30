@@ -25,8 +25,8 @@ R_m = 8.94
 
 # Motor voltage (set to 0 for free motion; can be a function of time or control input)
 def voltage(t,s0, c0, s1, c1):
-    if t < 0.005:
-        return 10.0
+    if t < 0.1:
+        return 2.0
     return 0.0
 
 # System dynamics
@@ -39,20 +39,36 @@ def dynamics(t, x):
     #theta_0 is arm angle
     #theta_1 is pendulum angle (0 upwards)
     # Mass matrix (left-hand side)
-    alpha = I_0 + m_1*L_0**2 + m_1*l_1**2*s1**2
-    beta = m_1*l_1**2*(2*s1*c1)
-    gamma = m_1*L_0*l_1*c1
-    sigma = m_1*L_0*l_1*s1
+    #alpha = I_0 + m_1*L_0**2 + m_1*l_1**2*s1**2
+    #beta = m_1*l_1**2*(2*s1*c1)
+    #gamma = m_1*L_0*l_1*c1
+    #sigma = m_1*L_0*l_1*s1
+
+    #M = np.array([
+    #    [alpha,gamma],
+    #    [gamma, I_1 + m_1*l_1**2],
+    #])
+
+    # Right-hand side
+    #f = np.array([
+    #    torque - b_0*d0 + sigma*d1**2 - beta*d0*d1,
+    #    -b_1*d1 + m_1*g*l_1*s1 + 0.5*beta*d0**2,
+    #])
+
+    alpha = I_0 + m_1 * L_0 ** 2 + m_1 * l_1 ** 2 * s1 ** 2
+    beta = -m_1 * l_1 ** 2 * (2 * s1 * c1)
+    gamma = -m_1 * L_0 * l_1 * c1
+    sigma = m_1 * L_0 * l_1 * s1
 
     M = np.array([
-        [alpha,gamma],
-        [gamma, I_1 + m_1*l_1**2],
+        [-alpha, -gamma],
+        [-gamma, -(I_1 + m_1 * l_1 ** 2)],
     ])
 
     # Right-hand side
     f = np.array([
-        torque - b_0*d0 + sigma*d1**2 - beta*d0*d1,
-        -b_1*d1 + m_1*g*l_1*s1 + 0.5*beta*d0**2,
+        -torque + b_0 * d0 + sigma * d1 ** 2 - beta * d0 * d1,
+        b_1 * d1 + m_1 * g * l_1 * s1 + 0.5 * beta * d0 ** 2,
     ])
 
     # Solve for accelerations: M * [theta_ddot, alpha_ddot] = f
@@ -64,7 +80,7 @@ def dynamics(t, x):
 # Initial conditions: [s0, c0, d0, s1, c1, d1]
 # Start with pendulum near upright (theta_1 = 0) and small perturbation
 theta_0 = 0.0
-theta_1 = np.pi
+theta_1 = 1
 x0 = [np.sin(theta_0), np.cos(theta_0), 0.0, np.sin(theta_1), np.cos(theta_1), 0.0]
 
 # Time span

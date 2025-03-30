@@ -119,14 +119,15 @@ def simulate():
     global sim_time_data, sim_motor_angle_data, sim_pendulum_angle_data, sim_rpm_data
     # Parameters (approximate values from QUBE-Servo 2 specs)
     m_1 = 0.024  # Pendulum mass (kg)
-    l_1 = 0.128  # Pendulum length to CoM (m)
-    I_1 = 0.000131  # Pendulum inertia about pivot (kg·m²)
+    l_1 = 0.128/2  # Pendulum length to CoM (m)
+    I_1 = 0.0000235  # Pendulum inertia about pivot (kg·m²)
     m_0 = 0.053  # Arm mass (kg)
     L_0 = 0.086  # Arm length (m)
-    I_0 = 0.0000572  # Arm inertia about pivot (kg·m²)
+    I_0 = 0.0000572 + 0.00006  # Arm inertia about pivot (kg·m²)
     g = 9.81  # Gravity (m/s²)
-    b_0 = 0.0003  # Viscous friction coefficient for arm (N·m·s/rad)
-    b_1 = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
+    b_0 = 0.0004  # Viscous friction coefficient for arm (N·m·s/rad)
+    b_1 = 0.000003  # Viscous friction coefficient for pendulum (N·m·s/rad)
+    k = 0.002  # Torsional spring constant for the cable effect (N·m/rad)
     K_m = 0.0431
     R_m = 8.94
 
@@ -144,19 +145,19 @@ def simulate():
         # theta_1 is pendulum angle (0 upwards)
         # Mass matrix (left-hand side)
         alpha = I_0 + m_1 * L_0 ** 2 + m_1 * l_1 ** 2 * s1 ** 2
-        beta = m_1 * l_1 ** 2 * (2 * s1 * c1)
-        gamma = m_1 * L_0 * l_1 * c1
+        beta = -m_1 * l_1 ** 2 * (2 * s1 * c1)
+        gamma = -m_1 * L_0 * l_1 * c1
         sigma = m_1 * L_0 * l_1 * s1
 
         M = np.array([
-            [alpha, gamma],
-            [gamma, I_1 + m_1 * l_1 ** 2],
+            [-alpha, -gamma],
+            [-gamma, -(I_1 + m_1 * l_1 ** 2)],
         ])
 
         # Right-hand side
         f = np.array([
-            torque - b_0 * d0 + sigma * d1 ** 2 - beta * d0 * d1,
-            -b_1 * d1 + m_1 * g * l_1 * s1 + 0.5 * beta * d0 ** 2,
+            -torque + b_0 * d0 + k*arctan2(s0,c0) + sigma * d1 ** 2 - beta * d0 * d1,
+            b_1 * d1 + m_1 * g * l_1 * s1 + 0.5 * beta * d0 ** 2,
         ])
 
         # Solve for accelerations: M * [theta_ddot, alpha_ddot] = f
@@ -167,9 +168,10 @@ def simulate():
 
     # Initial conditions: [s0, c0, d0, s1, c1, d1]
     # Start with pendulum near upright (theta_1 = 0) and small perturbation
-    theta_0 = 0.0
-    theta_1 = np.pi
-    x0 = [np.sin(theta_0), np.cos(theta_0), 0.0, np.sin(theta_1), np.cos(theta_1), 0.0]
+    theta_0 = np.radians(real_motor_angle_data[1])
+    theta_0_dot = real_rpm_data[1] * 2 * np.pi / 60
+    theta_1 = np.radians(real_pendulum_angle_data[1])
+    x0 = [np.sin(theta_0), np.cos(theta_0), theta_0_dot, np.sin(theta_1), np.cos(theta_1), 0.0]
 
     # Time span
     t_span = (0, run_time)
@@ -217,31 +219,31 @@ def plot_results():
     fig, axs = plt.subplots(4, 1, figsize=(10, 12), sharex=True)
 
     # Motor angle
-    axs[0].scatter(real_time_data, real_motor_angle_data, label="Real Motor Angle", color="blue", marker="o", s=1)
-    axs[0].scatter(sim_time_data, sim_motor_angle_data, label="Sim Motor Angle", color="cyan", marker="x", s=1)
-    axs[0].axhline(y=motor_target, color='r', linestyle='--', label=r"$\theta_0$ ="+f"{motor_target}")
+    axs[0].scatter(real_time_data, real_motor_angle_data, label="Real", color="blue", marker="o", s=1)
+    axs[0].scatter(sim_time_data, sim_motor_angle_data, label="Simulation", color="cyan", marker="x", s=1)
+    axs[0].axhline(y=motor_target, color='r', linestyle='--', label=r"Target $\theta_0$ ="+f"{motor_target}º")
     axs[0].set_ylabel("Motor Angle (deg)")
     axs[0].legend()
     axs[0].grid(True)
 
     # Pendulum angle
-    axs[1].scatter(real_time_data, real_pendulum_angle_data, label="Real Pendulum Angle", color="blue", marker="o", s=1)
-    axs[1].scatter(sim_time_data, sim_pendulum_angle_data, label="Sim Pendulum Angle", color="cyan", marker="x", s=1)
-    axs[1].axhline(y=pendulum_target, color='r', linestyle='--', label=r"$\theta_1$ ="+f"{pendulum_target}")
+    axs[1].scatter(real_time_data, real_pendulum_angle_data, label="Real", color="blue", marker="o", s=1)
+    axs[1].scatter(sim_time_data, sim_pendulum_angle_data, label="Simulation", color="cyan", marker="x", s=1)
+    axs[1].axhline(y=pendulum_target, color='r', linestyle='--', label=r"Target $\theta_1$ ="+f"{pendulum_target}º")
     axs[1].set_ylabel("Pendulum Angle (deg)")
     axs[1].legend()
     axs[1].grid(True)
 
     # RPM
-    axs[2].scatter(real_time_data, real_rpm_data, label="Real Motor RPM", color="blue", marker="o", s=1)
-    axs[2].scatter(sim_time_data, sim_rpm_data, label="Sim Motor RPM", color="cyan", marker="x", s=1)
+    axs[2].scatter(real_time_data, real_rpm_data, label="Real", color="blue", marker="o", s=1)
+    axs[2].scatter(sim_time_data, sim_rpm_data, label="Simulation", color="cyan", marker="x", s=1)
     axs[2].set_ylabel("Motor RPM")
     axs[2].legend()
     axs[2].grid(True)
 
     # Voltage
-    axs[3].scatter(real_time_data, real_voltage_data, label="Real Voltage", color="blue", marker="o", s=1)
-    axs[3].scatter(sim_voltage_time_data, sim_voltage_data, label="Sim Voltage", color="cyan", marker="x", s=1)
+    axs[3].scatter(real_time_data, real_voltage_data, label="Real", color="blue", marker="o", s=1)
+    axs[3].scatter(sim_voltage_time_data, sim_voltage_data, label="Simulation", color="cyan", marker="x", s=1)
     axs[3].set_xlabel("Time (s)")
     axs[3].set_ylabel("Voltage (V)")
     axs[3].legend()
@@ -255,10 +257,6 @@ if __name__ == "__main__":
     try:
         _data = [[], [], [], [], [], [], [], [], [], Packet()]
         lock = threading.Lock()
-
-        print("Running simulation...")
-        simulate()
-        print("Simulation finished.")
 
         if not USING_MAC:
             #thread1 = threading.Thread(target=startPlot, args=(_data, lock))
@@ -279,6 +277,10 @@ if __name__ == "__main__":
             thread1.start()
             thread1.join()
             print("Real control finished.")
+
+        print("Running simulation...")
+        simulate()
+        print("Simulation finished.")
 
         print("Plotting results...")
         plot_results()
