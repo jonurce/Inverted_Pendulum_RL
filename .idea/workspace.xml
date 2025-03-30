@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Comparing model with real pendulum">
-      <change beforePath="$PROJECT_DIR$/QUBE_PYTHON/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/QUBE_PYTHON/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
-    </list>
+    <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Comparing model with real pendulum" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +99,7 @@
       <workItem from="1742652953408" duration="30102000" />
       <workItem from="1742829540778" duration="17000" />
       <workItem from="1743253196277" duration="10383000" />
-      <workItem from="1743318256409" duration="23395000" />
+      <workItem from="1743318256409" duration="23628000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -240,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743353632438</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Comparing model with real pendulum">
+      <option name="closed" value="true" />
+      <created>1743353992308</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1743353992308</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,6 +273,6 @@
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Full_Observability.coverage" NAME="PPO Full Observability Coverage Results" MODIFIED="1742687540592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$gui.coverage" NAME="gui Coverage Results" MODIFIED="1743344751049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$control.coverage" NAME="control Coverage Results" MODIFIED="1743353647319" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$main.coverage" NAME="main Coverage Results" MODIFIED="1743353657124" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$main.coverage" NAME="main Coverage Results" MODIFIED="1743354107665" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
   </component>
 </project>
