@@ -18,7 +18,7 @@ pid = PID()
 # Main function to control. Must return the voltage (control signal) to apply to the motor.
 def control_system(current_time, dt, motor_angle, pendulum_angle, rpm):
     if current_time < 0.1:
-        return 10.0
+        return 2.0
     return 0.0
 
 

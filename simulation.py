@@ -4,29 +4,31 @@ from math import gamma
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
-
-import gymnasium as gym
-from gymnasium import spaces
-from stable_baselines3 import PPO
+from numpy.ma.core import arctan2
+import math
 
 
-# Parameters (approximate values from QUBE-Servo 2 specs)
 m_1 = 0.024  # Pendulum mass (kg)
-l_1 = 0.128  # Pendulum length to CoM (m)
-I_1 = 0.000131  # Pendulum inertia about pivot (kg·m²)
+l_1 = 0.128 / 2  # Pendulum length to CoM (m)
+I_1 = 0.0000235  # Pendulum inertia about pivot (kg·m²)
 m_0 = 0.053  # Arm mass (kg)
 L_0 = 0.086  # Arm length (m)
-I_0 = 0.0000572  # Arm inertia about pivot (kg·m²)
+I_0 = 0.0000572 + 0.00006  # Arm inertia about pivot (kg·m²)
 g = 9.81  # Gravity (m/s²)
-b_0 = 0.0003  # Viscous friction coefficient for arm (N·m·s/rad)
-b_1 = 0.0005  # Viscous friction coefficient for pendulum (N·m·s/rad)
+b_0 = 0.0004  # Viscous friction coefficient for arm (N·m·s/rad)
+b_1 = 0.000003  # Viscous friction coefficient for pendulum (N·m·s/rad)
+k = 0.002  # Torsional spring constant for the cable effect (N·m/rad)
 K_m = 0.0431
 R_m = 8.94
 
+run_time = 5
+dt = 0.001
+current_time = 0.0
+
 # Motor voltage (set to 0 for free motion; can be a function of time or control input)
-def voltage(t,s0, c0, s1, c1):
+def voltage(t, s0, c0, s1, c1):
     if t < 0.1:
-        return 2.0
+        return 4.0
     return 0.0
 
 # System dynamics
@@ -67,7 +69,7 @@ def dynamics(t, x):
 
     # Right-hand side
     f = np.array([
-        -torque + b_0 * d0 + sigma * d1 ** 2 - beta * d0 * d1,
+        -torque + b_0 * d0 + k * arctan2(s0, c0) + sigma * d1 ** 2 - beta * d0 * d1,
         b_1 * d1 + m_1 * g * l_1 * s1 + 0.5 * beta * d0 ** 2,
     ])
 
@@ -75,7 +77,7 @@ def dynamics(t, x):
     acc = np.linalg.solve(M, f)
 
     # State derivatives
-    return [d0*c0, -d0*s0, acc[0], d1*c1, -d1*s1, acc[1]]
+    return [d0 * c0, -d0 * s0, acc[0], d1 * c1, -d1 * s1, acc[1]]
 
 # Initial conditions: [s0, c0, d0, s1, c1, d1]
 # Start with pendulum near upright (theta_1 = 0) and small perturbation
@@ -84,8 +86,8 @@ theta_1 = 1
 x0 = [np.sin(theta_0), np.cos(theta_0), 0.0, np.sin(theta_1), np.cos(theta_1), 0.0]
 
 # Time span
-t_span = (0, 20)  # 5 seconds
-t_eval = np.linspace(0, 20, 5000)
+t_span = (0, run_time)
+t_eval = np.linspace(0, run_time, math.ceil(run_time/dt))
 
 # Solve ODE
 sol = solve_ivp(dynamics, t_span, x0, t_eval=t_eval, method='RK45')
