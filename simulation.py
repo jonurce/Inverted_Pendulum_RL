@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from numpy.ma.core import arctan2
 import math
 
+from stable_baselines3 import PPO
+
 
 m_1 = 0.024  # Pendulum mass (kg)
 l_1 = 0.128 / 2  # Pendulum length to CoM (m)
@@ -23,13 +25,34 @@ R_m = 8.94
 
 run_time = 5
 dt = 0.001
-current_time = 0.0
+
+times = []
+voltages = []
+
+# Load the trained PPO model
+model = PPO.load("pendulum_ppo.zip")
+
+# Initialize state history for frame stacking (2 frames of 6D states)
+frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])] * 2  # Start with arm and pendulum at 0º, zero velocity
 
 # Motor voltage (set to 0 for free motion; can be a function of time or control input)
 def voltage(t, s0, c0, s1, c1):
-    if t < 0.1:
-        return 4.0
-    return 0.0
+    global frame_history, dt
+    # Current state
+    t0_dot = (arctan2(s0, c0) - arctan2(frame_history[-1][0],frame_history[-1][1])) / dt
+    t1_dot = (arctan2(s1, c1) - arctan2(frame_history[-1][4], frame_history[-1][5])) / dt
+    current_state = np.array([s0, c0, t0_dot, s1, c1, t1_dot], dtype=np.float32)
+    # Update frame history
+    frame_history.pop(0)
+    frame_history.append(current_state)
+    # Stack and flatten for PPO input (6D × 2 = 12D)
+    stacked_obs = np.stack(frame_history, axis=0).flatten()
+    # Predict action (voltage)
+    action, _ = model.predict(stacked_obs, deterministic=True)
+    action = np.clip(action[0], -10.0, 10.0)
+    times.append(t)
+    voltages.append(action)
+    return action  # Ensure within action limits
 
 # System dynamics
 def dynamics(t, x):
@@ -37,9 +60,9 @@ def dynamics(t, x):
 
     torque = K_m*(voltage(t,s0, c0, s1, c1)-K_m*d0)/R_m
 
-    #Based on Euler-Lagrange differential equation
-    #theta_0 is arm angle
-    #theta_1 is pendulum angle (0 upwards)
+    #Based on Euler-Lagrange differential equation (original)
+    #theta_0 is arm angle ; theta_1 is pendulum angle (0 upwards)
+
     # Mass matrix (left-hand side)
     #alpha = I_0 + m_1*L_0**2 + m_1*l_1**2*s1**2
     #beta = m_1*l_1**2*(2*s1*c1)
@@ -57,6 +80,8 @@ def dynamics(t, x):
     #    -b_1*d1 + m_1*g*l_1*s1 + 0.5*beta*d0**2,
     #])
 
+    # Based on Euler-Lagrange differential equation (adapted to real pendulum)
+    #theta_0 is arm angle ; theta_1 is pendulum angle (0 downwards)
     alpha = I_0 + m_1 * L_0 ** 2 + m_1 * l_1 ** 2 * s1 ** 2
     beta = -m_1 * l_1 ** 2 * (2 * s1 * c1)
     gamma = -m_1 * L_0 * l_1 * c1
@@ -82,7 +107,7 @@ def dynamics(t, x):
 # Initial conditions: [s0, c0, d0, s1, c1, d1]
 # Start with pendulum near upright (theta_1 = 0) and small perturbation
 theta_0 = 0.0
-theta_1 = 1
+theta_1 = 0.0
 x0 = [np.sin(theta_0), np.cos(theta_0), 0.0, np.sin(theta_1), np.cos(theta_1), 0.0]
 
 # Time span
@@ -123,25 +148,32 @@ plt.show()
 # Plotting
 plt.figure(figsize=(12, 8))
 
-plt.subplot(3, 1, 1)
-plt.scatter(t, theta_0, label=r'$\theta_0$ (arm angle)'+'theta_0[2]', s=1)
+plt.subplot(4, 1, 1)
+plt.scatter(t, np.degrees(theta_0), label=r'$\theta_0$ (arm angle)', s=1)
 plt.xlabel('Time (s)')
-plt.ylabel('Angle (rad)')
+plt.ylabel('Angle (degrees)')
 plt.legend()
 plt.grid(True)
 
-plt.subplot(3, 1, 2)
-plt.scatter(t, theta_1, label=r'$\theta_1$ (pendulum angle)', s=1, color = "orange")
+plt.subplot(4, 1, 2)
+plt.scatter(t, np.degrees(theta_1), label=r'$\theta_1$ (pendulum angle)', s=1, color = "orange")
 plt.xlabel('Time (s)')
-plt.ylabel('Angle (rad)')
+plt.ylabel('Angle (degrees)')
 plt.legend()
 plt.grid(True)
 
-plt.subplot(3, 1, 3)
-plt.scatter(t, theta_0_dot, label=r'$\dot{\theta_0}$ (arm velocity)', s=1)
-plt.scatter(t, theta_1_dot, label=r'$\dot{\theta_1}$ (pendulum velocity)', s=1)
+plt.subplot(4, 1, 3)
+plt.scatter(t, theta_0_dot * 60 / (2*np.pi), label=r'$\dot{\theta_0}$ (arm velocity)', s=1)
+plt.scatter(t, theta_1_dot * 60 / (2*np.pi), label=r'$\dot{\theta_1}$ (pendulum velocity)', s=1)
 plt.xlabel('Time (s)')
-plt.ylabel('Angular Velocity (rad/s)')
+plt.ylabel('Angular Velocity (rpm)')
+plt.legend()
+plt.grid(True)
+
+plt.subplot(4, 1, 4)
+plt.plot(times, voltages, label='Voltage (Control Input)')
+plt.xlabel('Time (s)')
+plt.ylabel('Voltage (V)')
 plt.legend()
 plt.grid(True)
 
