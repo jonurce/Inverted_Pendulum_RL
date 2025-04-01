@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.ma.core import arctan2
 from scipy.integrate import solve_ivp
 import gymnasium as gym
 from gymnasium import spaces
@@ -21,23 +22,45 @@ k = 0.002  # Torsional spring constant for the cable effect (N·m/rad)
 K_m = 0.0431
 R_m = 8.94
 
-class LossTrackingCallback(BaseCallback):
+
+class TrainingMonitorCallback(BaseCallback):
     def __init__(self, check_freq=1000, patience=10, loss_threshold=0.01, verbose=1):
-        super(LossTrackingCallback, self).__init__(verbose)
+        super(TrainingMonitorCallback, self).__init__(verbose)
         self.check_freq = check_freq
         self.patience = patience
         self.loss_threshold = loss_threshold
-        self.loss_change = 0.005
+        self.loss_change = 0.005  # Threshold for loss change
         self.total_losses = []
+        self.rewards = []
+        self.episode_rewards = []
+        self.episode_lengths = []
+        self.theta1_values = []
 
     def _on_step(self):
+        # Collect step data
+        reward = self.locals['rewards'][0]
+        self.rewards.append(reward)
+
+        # Extract theta_1 from observation (adjust for frame stacking)
+        obs = self.locals['new_obs'][0]  # 12D due to n_stack=2
+        s1, c1 = obs[9], obs[10]  # Latest frame: indices 9 and 10
+        theta1 = np.arctan2(s1, c1)
+        self.theta1_values.append(theta1)
+
+        # Track episode completion
+        if self.locals['dones'][0]:
+            self.episode_rewards.append(sum(self.rewards))
+            self.episode_lengths.append(len(self.rewards))
+            self.rewards = []
+
+        # Periodic logging and early stopping check
         if self.n_calls % self.check_freq == 0:
             logger = self.model.logger
             total_loss = logger.name_to_value.get('train/loss', np.nan)
 
+            # Loss tracking for early stopping
             if not np.isnan(total_loss):
                 self.total_losses.append(total_loss)
-
                 if len(self.total_losses) > self.patience:
                     recent_losses = self.total_losses[-self.patience:]
                     loss_change = np.abs(np.mean(np.diff(recent_losses)))
@@ -45,8 +68,28 @@ class LossTrackingCallback(BaseCallback):
                     if avg_loss < self.loss_threshold or loss_change < self.loss_change:
                         print(f"Loss converged: Avg = {avg_loss:.4f} < {self.loss_threshold} "
                               f"or Change = {loss_change:.4f} < 0.005. Stopping.")
-                        return False
-        return True
+                        return False  # Stop training
+
+            # Additional monitoring metrics
+            avg_reward = np.mean(self.episode_rewards[-10:]) if self.episode_rewards else 0
+            avg_theta1 = np.mean(np.abs(np.degrees(self.theta1_values[-self.check_freq:])))
+            success_rate = np.mean(np.abs(self.theta1_values[-self.check_freq:]) > np.pi / 2)
+
+            # Print to terminal
+            print(f"Step {self.n_calls}:")
+            print(f"  Loss: {total_loss:.4f}")
+            print(f"  Avg Episode Reward (last 10): {avg_reward:.2f}")
+            print(f"  Avg |θ₁| (degrees, last {self.check_freq} steps): {avg_theta1:.2f}")
+            print(f"  Success Rate (|θ₁| > 90°, last {self.check_freq} steps): {success_rate:.2%}")
+            print(f"  Episodes Completed: {len(self.episode_rewards)}")
+
+            # Optional: Log to TensorBoard
+            self.logger.record('custom/avg_episode_reward', avg_reward)
+            self.logger.record('custom/avg_theta1_degrees', avg_theta1)
+            self.logger.record('custom/success_rate', success_rate)
+            self.logger.dump(self.n_calls)
+
+        return True  # Continue training unless stopped
 
 class QubeServo2Env(gym.Env):
     def __init__(self):
@@ -58,6 +101,7 @@ class QubeServo2Env(gym.Env):
         self.dt = 0.01
         self.max_steps = 2000
         self.step_count = 0
+        self.max_theta_0 = 5.0 * np.pi / 6.0
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
@@ -111,32 +155,85 @@ class QubeServo2Env(gym.Env):
         y_cm_dot = L_0 * c0 * d0 + l_1 * c1 * d1 * c0 - l_1 * d0 * s1 * s0
         z_cm_dot = -d1 * l_1 * s1
         T = 0.5 * I_0 * d0 ** 2 + 0.5 * m_1 * (x_cm_dot ** 2 + y_cm_dot ** 2 + z_cm_dot ** 2) + 0.5 * I_1 * d1 ** 2
-        V = m_1 * g * l_1 * (c1 + 1)
+        V = m_1 * g * l_1 * (1 - c1)
         E = T + V
         E_r = 2 * m_1 * g * l_1
 
-        reward = 4+(
-            - 2*(1+c1)
-            - 0.5*abs(np.arctan2(s0, c0))/(2*np.pi)
+        #reward = 5.5 +(
+         #   - 2*(1+c1)
+         #   - 0.5*abs(np.arctan2(s0, c0))/(np.pi)
             # - 1500*abs(torque_value)
-            # - 0.1 * (theta_dot**2 + alpha_dot**2)
+        #    - 0.005 * (abs(d0) + abs(d1))
             #- 0.05 * (theta_ddot**2 + alpha_ddot**2)
-            #-(E-E_r)**2
+        #    - 10 * abs(V-E_r)
+        #)
+
+        # COMPONENT 1: Base reward for pendulum being upright (range: -1 to 1)
+        # Uses cosine which is a naturally smooth function
+        upright_reward = - 2.0 * c1
+
+        # COMPONENT 2: Smooth penalty for high velocities - quadratic falloff
+        # Use tanh to create a smoother penalty that doesn't grow excessively large
+        velocity_penalty = -0.3 * np.tanh((d0 ** 2 + d1 ** 2) / 10.0)
+
+        # COMPONENT 3: Smooth penalty for arm position away from center
+        # Again using tanh for smooth bounded penalties
+        pos_penalty = -0.1 * np.tanh(arctan2(s0,c0) ** 2 / 2.0)
+
+        # COMPONENT 4: Smoother bonus for being close to upright position
+        upright_closeness = np.exp(-10.0 * (abs(arctan2(s1,c1))-np.pi) ** 2)  # Close to 1 when near upright, falls off quickly
+        stability_factor = np.exp(-1.0 * d1 ** 2)  # Close to 1 when velocity is low
+        bonus = 3.0 * upright_closeness * stability_factor  # Smoothly scales based on both factors
+
+        # COMPONENT 4.5: Smoother cost for being close to downright position
+        downright_closeness = np.exp(-10.0 * abs(arctan2(s1,c1)) ** 2) # Close to 1 when is near down
+        stability_factor = np.exp(-1.0 * d1 ** 2) # Close to 1 when velocity is low
+        bonus += -3.0 * downright_closeness * stability_factor  # Smoothly scales based on both factors
+
+        # COMPONENT 5: Smoother penalty for approaching limits
+        # Create a continuous penalty that increases as the arm approaches limits
+        # Map the distance to limits to a 0-1 range, with 1 being at the limit
+        limit_distance = np.clip(1.0 - (abs(arctan2(s0,c0)) - self.max_theta_0) / 0.5, 0, 1)
+
+        # Apply a nonlinear function to create gradually increasing penalty
+        # The penalty grows more rapidly as the arm gets very close to limits
+        limit_penalty = -10.0 * limit_distance ** 3
+
+        # COMPONENT 6: Energy management reward
+        # This component is already quite smooth, just adjust scaling
+        energy_reward = 2 - 0.15 * abs(m_1 * g * l_1 * (c1 + 1.0) + 0.5 * I_1 * d1 ** 2)
+
+        # Combine all components
+        reward = (
+                upright_reward
+                # + velocity_penalty
+                + pos_penalty
+                + bonus
+                + limit_penalty
+                + energy_reward
         )
+
         self.step_count += 1
-        done = abs(np.arctan2(s0, c0)) > 5 * np.pi / 6 or self.step_count >= self.max_steps
+        done = abs(np.arctan2(s0, c0)) > self.max_theta_0 or self.step_count >= self.max_steps
         #done = self.step_count >= self.max_steps
         truncated = self.step_count >= self.max_steps
         return self.state, reward, done, truncated, {}  # Return full state
 
 # Train with frame stacking
 env = DummyVecEnv([lambda: QubeServo2Env()])
-env = VecFrameStack(env, n_stack=2)  # Stacks 6D states: 6 × 2 = 12D
+env = VecFrameStack(env, n_stack=2)
 
 # Train PPO
-model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.0003, n_steps=1024)
-callback = LossTrackingCallback(check_freq=5000, patience=10, loss_threshold=0.01, verbose=1)
-model.learn(total_timesteps=200000, callback=callback)
+model = PPO(
+    "MlpPolicy",
+    env,
+    verbose=1,
+    learning_rate=0.0001,
+    n_steps=2048,
+    tensorboard_log="./tensorboard_logs/"  # Optional for TensorBoard
+)
+callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=0.01, verbose=1)
+model.learn(total_timesteps=2000000, callback=callback)
 model.save("pendulum_ppo")
 
 # Test and collect data
@@ -160,7 +257,7 @@ for i in range(1000):
     alphas.append(np.degrees(np.arctan2(obs[3],obs[4])))
     voltages.append(action[0])
     times.append(i * env.dt)
-    print(f"Step {i}: $Theta_0$ = {np.arctan2(obs[0],obs[1]):.3f}, $Theta_1$ = {np.arctan2(obs[3],obs[4]):.3f}, Voltage = {action[0]:.3f}, Reward = {reward:.3f}")
+    #print(f"Step {i}: $Theta_0$ = {np.arctan2(obs[0],obs[1]):.3f}, $Theta_1$ = {np.arctan2(obs[3],obs[4]):.3f}, Voltage = {action[0]:.3f}, Reward = {reward:.3f}")
     if done or truncated:
         obs, _ = env.reset()
         frame_history = [obs] * 2
@@ -187,7 +284,7 @@ plt.legend()
 plt.grid(True)
 
 plt.subplot(3, 1, 3)
-plt.scatter(times, voltages, label='Torque')
+plt.scatter(times, voltages, label='Voltage')
 plt.xlabel('Time (s)')
 plt.ylabel('Voltage (V)')
 plt.legend()
