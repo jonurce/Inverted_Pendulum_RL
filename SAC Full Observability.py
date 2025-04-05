@@ -269,7 +269,7 @@ model = SAC(
     ent_coef="auto",  # Automatic entropy tuning
     verbose=1,
     tensorboard_log="./tensorboard_logs/",
-    device=device  # Match your PPO setup
+    device=device
 )
 callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=0.01, verbose=1)
 try:
