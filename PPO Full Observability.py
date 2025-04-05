@@ -183,21 +183,21 @@ class QubeServo2Env(gym.Env):
         # COMPONENT 4: Smoother bonus for being close to upright position
         upright_closeness = np.exp(-10.0 * (abs(arctan2(s1,c1))-np.pi) ** 2)  # Close to 1 when near upright, falls off quickly
         stability_factor = np.exp(-1.0 * d1 ** 2)  # Close to 1 when velocity is low
-        bonus = 3.0 * upright_closeness * stability_factor  # Smoothly scales based on both factors
+        bonus = 10.0 * upright_closeness * stability_factor  # Smoothly scales based on both factors
 
         # COMPONENT 4.5: Smoother cost for being close to downright position
-        downright_closeness = np.exp(-10.0 * abs(arctan2(s1,c1)) ** 2) # Close to 1 when is near down
+        downright_closeness = np.exp(-1.0 * abs(arctan2(s1,c1)) ** 2) # Close to 1 when is near down
         stability_factor = np.exp(-1.0 * d1 ** 2) # Close to 1 when velocity is low
-        bonus += -3.0 * downright_closeness * stability_factor  # Smoothly scales based on both factors
+        bonus += -10.0 * downright_closeness * stability_factor  # Smoothly scales based on both factors
 
         # COMPONENT 5: Smoother penalty for approaching limits
         # Create a continuous penalty that increases as the arm approaches limits
         # Map the distance to limits to a 0-1 range, with 1 being at the limit
-        limit_distance = np.clip(1.0 - (abs(arctan2(s0,c0)) - self.max_theta_0) / 0.5, 0, 1)
+        limit_distance = np.clip(1.0 - 0.5 * (self.max_theta_0 - abs(arctan2(s0,c0))), 0, 1)
 
         # Apply a nonlinear function to create gradually increasing penalty
         # The penalty grows more rapidly as the arm gets very close to limits
-        limit_penalty = -10.0 * limit_distance ** 3
+        limit_penalty = -20.0 * limit_distance ** 3
 
         # COMPONENT 6: Energy management reward
         # This component is already quite smooth, just adjust scaling

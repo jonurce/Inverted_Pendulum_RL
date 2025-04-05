@@ -10,7 +10,7 @@ g = 9.81
 l_1 = 0.128 / 2
 m_1 = 0.024
 I_1 = 0.0000235
-max_theta_0 = np.pi
+max_theta_0 = 5.0 * np.pi / 6.0
 
 # Reward function
 def compute_reward(theta0, theta1, d0, d1):
@@ -25,21 +25,22 @@ def compute_reward(theta0, theta1, d0, d1):
 
     upright_closeness = np.exp(-10.0 * (abs(theta1) - np.pi)**2)
     stability_factor = np.exp(-1.0 * d1**2)
-    bonus = 3.0 * upright_closeness * stability_factor
+    bonus = 10.0 * upright_closeness * stability_factor
 
-    downright_closeness = np.exp(-10.0 * theta1**2)
-    bonus += -3.0 * downright_closeness * stability_factor
+    downright_closeness = np.exp(-1.0 * theta1**2)
+    stability_factor = np.exp(-1.0 * d1 ** 2)
+    bonus += -10.0 * downright_closeness * stability_factor
 
-    limit_distance = np.clip(1.0 - (abs(theta0) - max_theta_0) / 0.5, 0, 1)
-    limit_penalty = -10.0 * limit_distance**3
+    limit_distance = np.clip(1.0 - 0.5*(max_theta_0 - abs(theta0)), 0, 1)
+    limit_penalty = -20.0 * limit_distance**3
 
     energy_reward = 2 - 0.15 * abs(m_1 * g * l_1 * (c1 + 1.0) + 0.5 * I_1 * d1**2)
 
     return upright_reward + pos_penalty + bonus + limit_penalty + energy_reward
 
 # Create meshgrid
-theta0 = np.linspace(-np.pi, np.pi, 50)  # Reduced for responsiveness
-theta1 = np.linspace(-np.pi, np.pi, 50)
+theta0 = np.linspace(-np.pi, np.pi, 720)  # Reduced for responsiveness
+theta1 = np.linspace(-np.pi, np.pi, 720)
 theta0, theta1 = np.meshgrid(theta0, theta1)
 
 # Initial values
