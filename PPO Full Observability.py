@@ -81,11 +81,6 @@ class TrainingMonitorCallback(BaseCallback):
 
             # Print to terminal
             print(f"Step {self.n_calls}:")
-            print(f"  Loss: {total_loss:.4f}")
-            print(f"  Avg Episode Reward (last 10): {avg_reward:.2f}")
-            print(f"  Avg |θ₁| (degrees, last {self.check_freq} steps): {avg_theta1:.2f}")
-            print(f"  Success Rate (|θ₁| > 90°, last {self.check_freq} steps): {success_rate:.2%}")
-            print(f"  Episodes Completed: {len(self.episode_rewards)}")
 
             # Optional: Log to TensorBoard
             self.logger.record('custom/avg_episode_reward', avg_reward)
@@ -212,12 +207,13 @@ class QubeServo2Env(gym.Env):
 
         # Combine all components
         reward = (
-            + upright_reward
+            2*(1.0 - c1)
+            # + upright_reward
             # + velocity_penalty
-            + pos_penalty
-            + bonus
-            + limit_penalty
-            + energy_reward
+            # + pos_penalty
+            # + bonus
+            # + limit_penalty
+            #+ energy_reward
         )
 
         self.step_count += 1
