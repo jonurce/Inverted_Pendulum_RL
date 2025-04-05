@@ -94,7 +94,7 @@ class TrainingMonitorCallback(BaseCallback):
 class QubeServo2Env(gym.Env):
     def __init__(self):
         super().__init__()
-        self.action_limit = 5.0
+        self.action_limit = 6.0
         self.action_space = spaces.Box(low=-self.action_limit, high=self.action_limit, shape=(1,), dtype=np.float32)
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float32)  # Full state
         self.state = None
