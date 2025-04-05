@@ -238,13 +238,14 @@ class QubeServo2Env(gym.Env):
 
         # Combine all components
         reward = (
-                2 * (1.0 - c1)
-            # + upright_reward
+            20.0 +
+                # 2 * (1.0 - c1)
+             + upright_reward
             # + velocity_penalty
-            # + pos_penalty
-            # + bonus
-            # + limit_penalty
-            # + energy_reward
+             + pos_penalty
+             + bonus
+             + limit_penalty
+             + energy_reward
         )
 
         self.step_count += 1
@@ -277,7 +278,7 @@ try:
 except KeyboardInterrupt:
     model.save("pendulum_sac_interrupted")
     print("Training interrupted! Model saved as 'pendulum_sac_interrupted.zip'")
-model.save("pendulum_sac")
+model.save("pendulum_sac_random_ultrareward")
 
 # Test and collect data
 env = QubeServo2Env()

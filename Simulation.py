@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from numpy.ma.core import arctan2
 import math
 
-from stable_baselines3 import PPO
+from stable_baselines3 import SAC
 
 
 m_1 = 0.024  # Pendulum mass (kg)
@@ -30,7 +30,7 @@ times = []
 voltages = []
 
 # Load the trained PPO model
-model = PPO.load("pendulum_ppo.zip")
+model = SAC.load("pendulum_sac_4_simplerew.zip")
 
 # Initialize state history for frame stacking (2 frames of 6D states)
 frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])] * 2  # Start with arm and pendulum at 0º, zero velocity

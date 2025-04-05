@@ -237,7 +237,11 @@ model = PPO(
     device="cpu"
 )
 callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=0.01, verbose=1)
-model.learn(total_timesteps=2000000, callback=callback)
+try:
+    model.learn(total_timesteps=2000000, callback=callback)
+except KeyboardInterrupt:
+    model.save("pendulum_ppo_interrupted")
+    print("Training interrupted! Model saved as 'pendulum_ppo_interrupted.zip'")
 model.save("pendulum_ppo")
 
 # Test and collect data
