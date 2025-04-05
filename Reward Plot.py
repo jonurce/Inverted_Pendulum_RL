@@ -38,7 +38,7 @@ def compute_reward(theta0, theta1, d0, d1):
 
     energy_reward = 2 - 0.15 * abs(m_1 * g * l_1 * (c1 + 1.0) + 0.5 * I_1 * d1**2)
 
-    return -20.0 + upright_reward + pos_penalty + bonus + limit_penalty + energy_reward
+    return  upright_reward + pos_penalty + bonus + limit_penalty + energy_reward
 
 # Create meshgrid
 theta0 = np.linspace(-np.pi, np.pi, 720)  # Reduced for responsiveness

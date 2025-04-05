@@ -7,6 +7,10 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 from stable_baselines3.common.callbacks import BaseCallback
 import matplotlib.pyplot as plt
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
 # Parameters (approximate values from QUBE-Servo 2 specs)
 m_1 = 0.024  # Pendulum mass (kg)
@@ -208,7 +212,6 @@ class QubeServo2Env(gym.Env):
 
         # Combine all components
         reward = (
-            -20.0
             + upright_reward
             # + velocity_penalty
             + pos_penalty
@@ -234,7 +237,8 @@ model = PPO(
     verbose=1,
     learning_rate=0.0001,
     n_steps=2048,
-    tensorboard_log="./tensorboard_logs/"  # Optional for TensorBoard
+    tensorboard_log="./tensorboard_logs/",
+    device=device
 )
 callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=0.01, verbose=1)
 model.learn(total_timesteps=2000000, callback=callback)
