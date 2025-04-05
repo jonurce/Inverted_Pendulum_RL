@@ -3,7 +3,7 @@ from numpy.ma.core import arctan2
 from scipy.integrate import solve_ivp
 import gymnasium as gym
 from gymnasium import spaces
-from stable_baselines3 import PPO
+from stable_baselines3 import SAC
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 from stable_baselines3.common.callbacks import BaseCallback
 import matplotlib.pyplot as plt
@@ -80,12 +80,7 @@ class TrainingMonitorCallback(BaseCallback):
             success_rate = np.mean(np.abs(self.theta1_values[-self.check_freq:]) > np.pi / 2)
 
             # Print to terminal
-            print(f"Step {self.n_calls}:")
-            print(f"  Loss: {total_loss:.4f}")
-            print(f"  Avg Episode Reward (last 10): {avg_reward:.2f}")
-            print(f"  Avg |θ₁| (degrees, last {self.check_freq} steps): {avg_theta1:.2f}")
-            print(f"  Success Rate (|θ₁| > 90°, last {self.check_freq} steps): {success_rate:.2%}")
-            print(f"  Episodes Completed: {len(self.episode_rewards)}")
+            print(f"Step {self.n_calls}")
 
             # Optional: Log to TensorBoard
             self.logger.record('custom/avg_episode_reward', avg_reward)
@@ -231,18 +226,22 @@ env = DummyVecEnv([lambda: QubeServo2Env()])
 env = VecFrameStack(env, n_stack=2)
 
 # Train PPO
-model = PPO(
+model = SAC(
     "MlpPolicy",
     env,
+    learning_rate=3e-4,  # SAC typically uses a slightly higher default LR than PPO
+    buffer_size=1000000,  # Replay buffer size
+    batch_size=256,  # Number of samples per update
+    tau=0.005,  # Soft update coefficient for target network
+    gamma=0.99,  # Discount factor
+    ent_coef="auto",  # Automatic entropy tuning
     verbose=1,
-    learning_rate=0.0001,
-    n_steps=2048,
     tensorboard_log="./tensorboard_logs/",
-    device="cpu"
+    device=device  # Match your PPO setup
 )
 callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=0.01, verbose=1)
 model.learn(total_timesteps=2000000, callback=callback)
-model.save("pendulum_ppo")
+model.save("pendulum_sac")
 
 # Test and collect data
 env = QubeServo2Env()

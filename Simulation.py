@@ -23,7 +23,7 @@ k = 0.002  # Torsional spring constant for the cable effect (N·m/rad)
 K_m = 0.0431
 R_m = 8.94
 
-run_time = 10
+run_time = 20
 dt = 0.01
 
 times = []
