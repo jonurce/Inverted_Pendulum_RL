@@ -185,19 +185,22 @@ class QubeServo2Env(gym.Env):
         stability_factor = np.exp(-1.0 * d1 ** 2)  # Close to 1 when velocity is low
         bonus = 10.0 * upright_closeness * stability_factor  # Smoothly scales based on both factors
 
-        # COMPONENT 4.5: Smoother cost for being close to downright position
+        # COMPONENT 4.1: Smoother cost for being close to downright position
         downright_closeness = np.exp(-1.0 * abs(arctan2(s1,c1)) ** 2) # Close to 1 when is near down
-        stability_factor = np.exp(-1.0 * d1 ** 2) # Close to 1 when velocity is low
         bonus += -10.0 * downright_closeness * stability_factor  # Smoothly scales based on both factors
+
+        # COMPONENT 4.2: Bonus when pendulum is up and theta0 not moving
+        stability_0 = np.exp(-1.0 * d0 ** 2)
+        bonus += 5.0 * upright_closeness * stability_0
 
         # COMPONENT 5: Smoother penalty for approaching limits
         # Create a continuous penalty that increases as the arm approaches limits
         # Map the distance to limits to a 0-1 range, with 1 being at the limit
-        limit_distance = np.clip(1.0 - 0.5 * (self.max_theta_0 - abs(arctan2(s0,c0))), 0, 1)
+        limit_distance = np.clip(0.8 - 0.2 * (self.max_theta_0 - abs(arctan2(s0,c0))), 0, 1)
 
         # Apply a nonlinear function to create gradually increasing penalty
         # The penalty grows more rapidly as the arm gets very close to limits
-        limit_penalty = -20.0 * limit_distance ** 3
+        limit_penalty = -15.0 * limit_distance ** 3
 
         # COMPONENT 6: Energy management reward
         # This component is already quite smooth, just adjust scaling
@@ -205,12 +208,13 @@ class QubeServo2Env(gym.Env):
 
         # Combine all components
         reward = (
-                upright_reward
-                # + velocity_penalty
-                + pos_penalty
-                + bonus
-                + limit_penalty
-                + energy_reward
+            -20.0
+            + upright_reward
+            # + velocity_penalty
+            + pos_penalty
+            + bonus
+            + limit_penalty
+            + energy_reward
         )
 
         self.step_count += 1
