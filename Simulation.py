@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from numpy.ma.core import arctan2
 import math
 
-from stable_baselines3 import SAC
+from stable_baselines3 import PPO, SAC
 
 
 m_1 = 0.024  # Pendulum mass (kg)
@@ -29,11 +29,11 @@ dt = 0.01
 times = []
 voltages = []
 
-# Load the trained PPO model
-model = SAC.load("pendulum_sac_4_simplerew.zip")
+# Load the trained model
+model = SAC.load("pendulum_sac_6_interrupted.zip")
 
 # Initialize state history for frame stacking (2 frames of 6D states)
-frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])] * 2  # Start with arm and pendulum at 0º, zero velocity
+frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])]  # Start with arm and pendulum at 0º, zero velocity
 
 # Motor voltage (set to 0 for free motion; can be a function of time or control input)
 def voltage(t, s0, c0, s1, c1):
@@ -46,7 +46,7 @@ def voltage(t, s0, c0, s1, c1):
     frame_history.pop(0)
     frame_history.append(current_state)
     # Stack and flatten for PPO input (6D × 2 = 12D)
-    stacked_obs = np.stack(frame_history, axis=0).flatten()
+    stacked_obs = np.stack(current_state, axis=0).flatten()
     # Predict action (voltage)
     action, _ = model.predict(stacked_obs, deterministic=True)
     action = np.clip(action[0], -10.0, 10.0)
