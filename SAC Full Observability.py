@@ -4,7 +4,7 @@ from scipy.integrate import solve_ivp
 import gymnasium as gym
 from gymnasium import spaces
 from stable_baselines3 import SAC
-from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
+from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 import torch
@@ -31,9 +31,9 @@ class TrainingMonitorCallback(BaseCallback):
         reward = self.locals['rewards'][0]
         self.rewards.append(reward)
 
-        # Extract theta_1 from observation (adjust for frame stacking)
-        obs = self.locals['new_obs'][0]  # 12D due to n_stack=2
-        s1, c1 = obs[-4], obs[-3]  # Latest frame: indices 9 and 10
+        # Extract theta_1 from observation
+        obs = self.locals['new_obs'][0]
+        s1, c1 = obs[3], obs[4]
         theta1 = np.arctan2(s1, c1)
         self.theta1_values.append(theta1)
 
@@ -134,7 +134,7 @@ class QubeServo2Env(gym.Env):
         theta1 = np.random.uniform(-np.pi, np.pi)  # Anywhere for pendulum
         self.state = np.array([np.sin(theta0), np.cos(theta0), 0.0, np.sin(theta1), np.cos(theta1), 0.0], dtype=np.float32)
         self.step_count = 0
-        return self.state, {}  # Return full state: [theta, theta_dot, alpha, alpha_dot]
+        return self.state, {}
 
     def step(self, action):
 
@@ -255,8 +255,7 @@ class QubeServo2Env(gym.Env):
         return self.state, reward, done, truncated, {}  # Return full state
 
 # Train with frame stacking
-env = SubprocVecEnv([lambda: QubeServo2Env() for _ in range(4)])
-env = VecFrameStack(env, n_stack=2)
+env = DummyVecEnv([lambda: QubeServo2Env()])
 
 # Train PPO
 model = SAC(
@@ -276,14 +275,12 @@ callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=
 try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
-    model.save("pendulum_sac_interrupted")
-    print("Training interrupted! Model saved as 'pendulum_sac_interrupted.zip'")
-model.save("pendulum_sac_random_ultrareward")
+    print("Training interrupted! Model saved")
+model.save("Trained Models/pendulum_sac_random_ultrareward")
 
 # Test and collect data
 env = QubeServo2Env()
 obs, _ = env.reset()
-frame_history = [obs] * 2  # obs is now 6D
 rewards = []
 thetas = []
 alphas = []
@@ -291,17 +288,14 @@ voltages = []
 times = []
 
 for i in range(1000):
-    stacked_obs = np.stack(frame_history, axis=0).flatten()  # 6 × 2 = 12D flattened
+    stacked_obs = np.stack(obs, axis=0).flatten()
     action, _states = model.predict(stacked_obs, deterministic=True)
     obs, reward, done, truncated, _ = env.step(action)
-    frame_history.pop(0)
-    frame_history.append(obs)
     rewards.append(reward)
     thetas.append(np.degrees(np.arctan2(obs[0],obs[1])))
     alphas.append(np.degrees(np.arctan2(obs[3],obs[4])))
     voltages.append(action[0])
     times.append(i * env.dt)
-    #print(f"Step {i}: $Theta_0$ = {np.arctan2(obs[0],obs[1]):.3f}, $Theta_1$ = {np.arctan2(obs[3],obs[4]):.3f}, Voltage = {action[0]:.3f}, Reward = {reward:.3f}")
     if done or truncated:
         obs, _ = env.reset()
         frame_history = [obs] * 2

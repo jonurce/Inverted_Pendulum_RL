@@ -30,35 +30,39 @@ times = []
 voltages = []
 
 # Load the trained model
-model = SAC.load("pendulum_sac_6_interrupted.zip")
+model = SAC.load("Trained Models/sac_6.zip", device="cpu")
 
-# Initialize state history for frame stacking (2 frames of 6D states)
-frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])]  # Start with arm and pendulum at 0º, zero velocity
+# Initialize state history for frame stacking. Start with arm and pendulum at 0º, zero velocity
+frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])]
 
-# Motor voltage (set to 0 for free motion; can be a function of time or control input)
-def voltage(t, s0, c0, s1, c1):
-    global frame_history, dt
+def voltage(t, s0, c0, d0, s1, c1, d1):
+    global last_state, dt
     # Current state
-    t0_dot = (arctan2(s0, c0) - arctan2(frame_history[-1][0],frame_history[-1][1])) / dt
-    t1_dot = (arctan2(s1, c1) - arctan2(frame_history[-1][4], frame_history[-1][5])) / dt
-    current_state = np.array([s0, c0, t0_dot, s1, c1, t1_dot], dtype=np.float32)
-    # Update frame history
+    #t0_dot = (arctan2(s0, c0) - arctan2(frame_history[-1][0],frame_history[-1][1])) / dt
+    #t1_dot = (arctan2(s1, c1) - arctan2(frame_history[-1][3], frame_history[-1][4])) / dt
+    current_state = np.array([s0, c0, d0, s1, c1, d1], dtype=np.float32)
+
+    # Update last_state
     frame_history.pop(0)
     frame_history.append(current_state)
-    # Stack and flatten for PPO input (6D × 2 = 12D)
-    stacked_obs = np.stack(current_state, axis=0).flatten()
+
+    # Stack and flatten for model input
+    stacked_obs = np.stack(frame_history, axis=0).flatten()
+
     # Predict action (voltage)
     action, _ = model.predict(stacked_obs, deterministic=True)
-    action = np.clip(action[0], -10.0, 10.0)
+    action = np.clip(action[0], -6.0, 6.0)
+
     times.append(t)
     voltages.append(action)
+
     return action  # Ensure within action limits
 
 # System dynamics
 def dynamics(t, x):
     s0, c0, d0, s1, c1, d1 = x
 
-    torque = K_m*(voltage(t,s0, c0, s1, c1)-K_m*d0)/R_m
+    torque = K_m*(voltage(t,s0, c0, d0, s1, c1, d1)-K_m*d0)/R_m
 
     #Based on Euler-Lagrange differential equation (original)
     #theta_0 is arm angle ; theta_1 is pendulum angle (0 upwards)
