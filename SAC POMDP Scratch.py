@@ -9,6 +9,7 @@ import numba as nb
 from time import time
 from numpy.ma.core import arctan2
 
+#CODE FROM MODESTAS
 # Define device globally
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
