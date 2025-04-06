@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC">
-      <change afterPath="$PROJECT_DIR$/pendulum_sac_4_simplerew.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PPO Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/PPO Full Observability.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pendulum_sac.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_4/events.out.tfevents.1743867416.ManulabPC.26920.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_4/events.out.tfevents.1743867416.ManulabPC.26920.0" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +32,12 @@
     &quot;assignee&quot;: &quot;jonurce&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/jonurce/AIS4002_DRL.git",
-    "accountId": "b14262bc-48a4-4017-8abc-9613807c4400"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jonurce/AIS4002_DRL.git&quot;,
+    &quot;accountId&quot;: &quot;b14262bc-48a4-4017-8abc-9613807c4400&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -49,35 +47,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.PPO Full Observability.executor": "Run",
-    "Python.PPO Partial Observability.executor": "Run",
-    "Python.PPO-Tutorial.executor": "Run",
-    "Python.PPO.executor": "Run",
-    "Python.Reward Plot.executor": "Run",
-    "Python.SAC Full Observability.executor": "Run",
-    "Python.Simulation.executor": "Run",
-    "Python.control.executor": "Run",
-    "Python.cuda.executor": "Run",
-    "Python.gui.executor": "Run",
-    "Python.install.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.simulation.executor": "Run",
-    "Python.train.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/maggi/PycharmProjects/AIS4002_DRL",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.PPO Full Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO Partial Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO-Tutorial.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Reward Plot.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SAC Full Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.control.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cuda.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.install.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maggi/PycharmProjects/AIS4002_DRL&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL" />
@@ -365,15 +363,7 @@
       <option name="project" value="LOCAL" />
       <updated>1743872166185</updated>
     </task>
-    <task id="LOCAL-00031" summary="Trying SAC">
-      <option name="closed" value="true" />
-      <created>1743872700774</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1743872700774</updated>
-    </task>
-    <option name="localTasksCounter" value="32" />
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -397,16 +387,19 @@
     <option name="LAST_COMMIT_MESSAGE" value="Trying SAC" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$install.coverage" NAME="install Coverage Results" MODIFIED="1742744618640" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Partial_Observability.coverage" NAME="PPO Partial Observability Coverage Results" MODIFIED="1742146749225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1743854592821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO.coverage" NAME="PPO Coverage Results" MODIFIED="1742145621879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Tutorial.coverage" NAME="PPO-Tutorial Coverage Results" MODIFIED="1742114031984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$SAC_Full_Observability.coverage" NAME="SAC Full Observability Coverage Results" MODIFIED="1743882942412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$train.coverage" NAME="train Coverage Results" MODIFIED="1743838560388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$Simulation.coverage" NAME="Simulation Coverage Results" MODIFIED="1743922222274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$install.coverage" NAME="install Coverage Results" MODIFIED="1742744618640" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO.coverage" NAME="PPO Coverage Results" MODIFIED="1742145621879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$Reward_Plot.coverage" NAME="Reward Plot Coverage Results" MODIFIED="1743854239694" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Full_Observability.coverage" NAME="PPO Full Observability Coverage Results" MODIFIED="1743854390125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$gui.coverage" NAME="gui Coverage Results" MODIFIED="1743344751049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$control.coverage" NAME="control Coverage Results" MODIFIED="1743353647319" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$main.coverage" NAME="main Coverage Results" MODIFIED="1743354107665" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$train.coverage" NAME="train Coverage Results" MODIFIED="1743838560388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$TRY.coverage" NAME="TRY Coverage Results" MODIFIED="1743873827847" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -32,8 +32,8 @@ class TrainingMonitorCallback(BaseCallback):
         self.rewards.append(reward)
 
         # Extract theta_1 from observation (adjust for frame stacking)
-        obs = self.locals['new_obs'][0]  # 12D due to n_stack=2
-        s1, c1 = obs[-4], obs[-3]  # Latest frame: indices 9 and 10
+        obs = self.locals['new_obs'][0]
+        s1, c1 = obs[-3], obs[-2]
         theta1 = np.arctan2(s1, c1)
         self.theta1_values.append(theta1)
 
@@ -84,7 +84,7 @@ class QubeServo2Env(gym.Env):
         super().__init__()
         self.action_limit = 6.0
         self.action_space = spaces.Box(low=-self.action_limit, high=self.action_limit, shape=(1,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float32)  # Full state
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float32)
         self.state = None
         self.dt = 0.01
         self.max_steps = 2000
@@ -115,7 +115,7 @@ class QubeServo2Env(gym.Env):
         if seed is not None:
             np.random.seed(seed)  # Ensure reproducibility per environment
 
-            # Randomize parameters at the start of each episode
+        # Randomize parameters at the start of each episode
         self.params = self.nominal_params.copy()
         self.params['m_1'] = self.nominal_params['m_1'] * np.random.uniform(0.8, 1.2)  # ±20%
         self.params['l_1'] = self.nominal_params['l_1'] * np.random.uniform(0.8, 1.2)  # ±20%
@@ -238,8 +238,7 @@ class QubeServo2Env(gym.Env):
 
         # Combine all components
         reward = (
-            20.0 +
-                # 2 * (1.0 - c1)
+                2 * (1.0 - c1)
              + upright_reward
             # + velocity_penalty
              + pos_penalty
@@ -255,8 +254,7 @@ class QubeServo2Env(gym.Env):
         return self.state, reward, done, truncated, {}  # Return full state
 
 # Train with frame stacking
-env = SubprocVecEnv([lambda: QubeServo2Env() for _ in range(4)])
-env = VecFrameStack(env, n_stack=2)
+env = DummyVecEnv([lambda: QubeServo2Env()])
 
 # Train PPO
 model = SAC(
@@ -276,14 +274,13 @@ callback = TrainingMonitorCallback(check_freq=1000, patience=10, loss_threshold=
 try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
-    model.save("pendulum_sac_interrupted")
-    print("Training interrupted! Model saved as 'pendulum_sac_interrupted.zip'")
-model.save("pendulum_sac_random_ultrareward")
+    model.save("sac_6_interrupted")
+    print("Training interrupted! Model saved as 'sac_6_interrupted.zip'")
+model.save("sac_6")
 
 # Test and collect data
 env = QubeServo2Env()
 obs, _ = env.reset()
-frame_history = [obs] * 2  # obs is now 6D
 rewards = []
 thetas = []
 alphas = []
@@ -291,7 +288,7 @@ voltages = []
 times = []
 
 for i in range(1000):
-    stacked_obs = np.stack(frame_history, axis=0).flatten()  # 6 × 2 = 12D flattened
+    stacked_obs = np.stack(obs, axis=0).flatten()
     action, _states = model.predict(stacked_obs, deterministic=True)
     obs, reward, done, truncated, _ = env.step(action)
     frame_history.pop(0)
