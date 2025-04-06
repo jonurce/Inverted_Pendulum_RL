@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC">
-      <change afterPath="$PROJECT_DIR$/pendulum_sac_4_simplerew.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PPO Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/PPO Full Observability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pendulum_sac.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_4/events.out.tfevents.1743867416.ManulabPC.26920.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_4/events.out.tfevents.1743867416.ManulabPC.26920.0" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +31,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/jonurce/AIS4002_DRL.git",
-    "accountId": "b14262bc-48a4-4017-8abc-9613807c4400"
+    "accountId": "295cb66a-42c0-4b59-9e48-4ae2f116158e"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -49,35 +43,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.PPO Full Observability.executor": "Run",
-    "Python.PPO Partial Observability.executor": "Run",
-    "Python.PPO-Tutorial.executor": "Run",
-    "Python.PPO.executor": "Run",
-    "Python.Reward Plot.executor": "Run",
-    "Python.SAC Full Observability.executor": "Run",
-    "Python.Simulation.executor": "Run",
-    "Python.control.executor": "Run",
-    "Python.cuda.executor": "Run",
-    "Python.gui.executor": "Run",
-    "Python.install.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.simulation.executor": "Run",
-    "Python.train.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/maggi/PycharmProjects/AIS4002_DRL",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.PPO Full Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO Partial Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO-Tutorial.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Reward Plot.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SAC Full Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.control.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cuda.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.install.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maggi/PycharmProjects/AIS4002_DRL&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL" />
@@ -86,7 +80,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-a5bc9544c897-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.23654.177" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.220" />
+        <option value="bundled-python-sdk-0fc6c617c4bd-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.220" />
       </set>
     </attachedChunks>
   </component>
@@ -124,6 +119,7 @@
       <workItem from="1743601163693" duration="670000" />
       <workItem from="1743677380044" duration="7040000" />
       <workItem from="1743838529974" duration="8357000" />
+      <workItem from="1743926916377" duration="74000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -378,6 +374,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit" />
