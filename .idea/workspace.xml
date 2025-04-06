@@ -5,17 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC">
-      <change afterPath="$PROJECT_DIR$/SAC Partial Observability RNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SAC POMDP Scratch.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/SAC_simplereward.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trained Models/pendulum_ppo_12.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Trained Models/ppo_12.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trained Models/pendulum_sac_4_simplerew.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Trained Models/sac_4_simplerew.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trained Models/pendulum_sac_5_random_ultrareward.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Trained Models/sac_5_random_ultrareward.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trained Models/pendulum_sac_6_interrupted.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Trained Models/sac_6_interrupted.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC Partial Observability RNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Partial Observability RNN.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,35 +46,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.PPO Full Observability.executor&quot;: &quot;Run&quot;,
-    &quot;Python.PPO Partial Observability.executor&quot;: &quot;Run&quot;,
-    &quot;Python.PPO-Tutorial.executor&quot;: &quot;Run&quot;,
-    &quot;Python.PPO.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Reward Plot.executor&quot;: &quot;Run&quot;,
-    &quot;Python.SAC Full Observability.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Simulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.control.executor&quot;: &quot;Run&quot;,
-    &quot;Python.cuda.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.install.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.simulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.train.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/maggi/PycharmProjects/AIS4002_DRL&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.PPO Full Observability.executor": "Run",
+    "Python.PPO Partial Observability.executor": "Run",
+    "Python.PPO-Tutorial.executor": "Run",
+    "Python.PPO.executor": "Run",
+    "Python.Reward Plot.executor": "Run",
+    "Python.SAC Full Observability.executor": "Run",
+    "Python.SAC POMDP Scratch.executor": "Run",
+    "Python.SAC Partial Observability RNN.executor": "Run",
+    "Python.Simulation.executor": "Run",
+    "Python.control.executor": "Run",
+    "Python.cuda.executor": "Run",
+    "Python.gui.executor": "Run",
+    "Python.install.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.simulation.executor": "Run",
+    "Python.train.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/maggi/PycharmProjects/AIS4002_DRL",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL" />
@@ -404,7 +399,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743872700774</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Trying SAC">
+      <option name="closed" value="true" />
+      <created>1743933344238</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1743933344238</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

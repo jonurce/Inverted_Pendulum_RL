@@ -113,22 +113,10 @@ class QubeServo2Env(gym.Env):
         super().reset(seed=seed)
 
         if seed is not None:
-            np.random.seed(seed)  # Ensure reproducibility per environment
-
-            # Randomize parameters at the start of each episode
-        self.params = self.nominal_params.copy()
-        self.params['m_1'] = self.nominal_params['m_1'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['l_1'] = self.nominal_params['l_1'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['I_1'] = self.nominal_params['I_1'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['m_0'] = self.nominal_params['m_0'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['L_0'] = self.nominal_params['L_0'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['I_0'] = self.nominal_params['I_0'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['g'] = self.nominal_params['g'] * np.random.uniform(0.95, 1.05)  # ±5%
-        self.params['b_0'] = self.nominal_params['b_0'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['b_1'] = self.nominal_params['b_1'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['k'] = self.nominal_params['k'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['K_m'] = self.nominal_params['K_m'] * np.random.uniform(0.8, 1.2)  # ±20%
-        self.params['R_m'] = self.nominal_params['R_m'] * np.random.uniform(0.8, 1.2)  # ±20%
+            np.random.seed(seed)
+            self.params = self.nominal_params.copy()
+            for key in self.params:
+                self.params[key] *= np.random.uniform(0.8, 1.2) if key != 'g' else np.random.uniform(0.95, 1.05)
 
         theta0 = np.random.uniform(-np.pi / 6, np.pi / 6)  # ±30° for arm
         theta1 = np.random.uniform(-np.pi, np.pi)  # Anywhere for pendulum
@@ -138,18 +126,7 @@ class QubeServo2Env(gym.Env):
 
     def step(self, action):
 
-        m_1 = self.params['m_1']
-        l_1 = self.params['l_1']
-        I_1 = self.params['I_1']
-        m_0 = self.params['m_0']
-        L_0 = self.params['L_0']
-        I_0 = self.params['I_0']
-        g = self.params['g']
-        b_0 = self.params['b_0']
-        b_1 = self.params['b_1']
-        k = self.params['k']
-        K_m = self.params['K_m']
-        R_m = self.params['R_m']
+        m_1, l_1, I_1, m_0, L_0, I_0, g, b_0, b_1, k, K_m, R_m = [self.params[p] for p in self.params]
 
         voltage = np.clip(action[0], -self.action_limit, self.action_limit)
         torque = K_m * (voltage - K_m * self.state[2]) / R_m
@@ -276,7 +253,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/pendulum_sac_random_ultrareward")
+model.save("Trained Models/sac_7")
 
 # Test and collect data
 env = QubeServo2Env()
