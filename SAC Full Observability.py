@@ -4,7 +4,7 @@ from scipy.integrate import solve_ivp
 import gymnasium as gym
 from gymnasium import spaces
 from stable_baselines3 import SAC
-from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, SubprocVecEnv
+from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 from stable_baselines3.common.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 import torch
@@ -255,7 +255,7 @@ class QubeServo2Env(gym.Env):
         return self.state, reward, done, truncated, {}  # Return full state
 
 # Train with frame stacking
-env = SubprocVecEnv([lambda: QubeServo2Env() for _ in range(4)])
+env = DummyVecEnv([lambda: QubeServo2Env()])
 env = VecFrameStack(env, n_stack=2)
 
 # Train PPO
@@ -278,7 +278,7 @@ try:
 except KeyboardInterrupt:
     model.save("pendulum_sac_interrupted")
     print("Training interrupted! Model saved as 'pendulum_sac_interrupted.zip'")
-model.save("pendulum_sac_random_ultrareward")
+model.save("pendulum_sac_5_random_ultrareward")
 
 # Test and collect data
 env = QubeServo2Env()

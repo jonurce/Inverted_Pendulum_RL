@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC">
-      <change afterPath="$PROJECT_DIR$/pendulum_sac_4_simplerew.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PPO Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/PPO Full Observability.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pendulum_sac.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_4/events.out.tfevents.1743867416.ManulabPC.26920.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_4/events.out.tfevents.1743867416.ManulabPC.26920.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pendulum_ppo.zip" beforeDir="false" afterPath="$PROJECT_DIR$/pendulum_ppo_12.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -373,7 +369,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743872700774</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Trying SAC">
+      <option name="closed" value="true" />
+      <created>1743874439852</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1743874439852</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
