@@ -230,7 +230,7 @@ class QubeServo2Env(gym.Env):
         return self.state, reward, done, truncated, {}
 
 # Train with frame stacking
-n_frames = 2
+n_frames = 3
 env = DummyVecEnv([lambda: QubeServo2Env()])
 env = VecFrameStack(env, n_stack=n_frames)
 
@@ -253,7 +253,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/sac_9")
+model.save("Trained Models/sac_10")
 
 # Test and collect data
 env = QubeServo2Env()
