@@ -47,38 +47,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.PPO Full Observability.executor": "Run",
-    "Python.PPO Partial Observability.executor": "Run",
-    "Python.PPO-Tutorial.executor": "Run",
-    "Python.PPO.executor": "Run",
-    "Python.Reward Plot.executor": "Run",
-    "Python.SAC Full Observability.executor": "Run",
-    "Python.SAC POMDP Scratch.executor": "Run",
-    "Python.SAC Partial Observability RNN.executor": "Run",
-    "Python.SAC Partial Observability.executor": "Run",
-    "Python.Simulation.executor": "Run",
-    "Python.control.executor": "Run",
-    "Python.cuda.executor": "Run",
-    "Python.gui.executor": "Run",
-    "Python.install.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.simulation.executor": "Run",
-    "Python.train.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/jonur/Workspace/MECAUT/AIS4002_DRL/Figures",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.PPO Full Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO Partial Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO-Tutorial.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PPO.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Reward Plot.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SAC Full Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SAC POMDP Scratch.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SAC Partial Observability RNN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SAC Partial Observability.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.control.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cuda.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.install.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.train.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jonur/Workspace/MECAUT/AIS4002_DRL/Figures&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL" />
