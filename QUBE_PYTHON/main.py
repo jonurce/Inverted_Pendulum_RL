@@ -60,7 +60,7 @@ sim_rpm_data = []
 sim_voltage_time_data = []
 sim_voltage_data = []
 
-run_time = 5
+run_time = 10
 
 
 def control(data, lock):
@@ -103,17 +103,18 @@ def control(data, lock):
         # Store data
         real_time_data.append(current_time)
         real_motor_angle_data.append(motor_degrees)
-        real_pendulum_angle_data.append(pendulum_degrees)
+        real_pendulum_angle_data.append(pendulum_degrees )
         real_rpm_data.append(rpm)
         real_voltage_data.append(u)
 
-        # Stop after 20 seconds
-        if current_time >= run_time:
-            qube.setMotorVoltage(0)  # Stop the motor
-            break
-
         # Apply control signal
         qube.setMotorVoltage(u)
+
+        # Stop after run time
+        if current_time >= run_time:
+            qube.setMotorVoltage(0.0)  # Stop the motor
+            break
+
 
 def simulate():
     global sim_time_data, sim_motor_angle_data, sim_pendulum_angle_data, sim_rpm_data
