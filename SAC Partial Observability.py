@@ -158,7 +158,6 @@ class QubeServo2Env(gym.Env):
 
         full_state = np.append(self.state, self.d1)
         sol = solve_ivp(dynamics, [0, self.dt], full_state, method='RK45')
-        dyn = dynamics(0, self.state)
         new_full_state = sol.y[:, -1]
 
         self.state = new_full_state[:-1]
@@ -254,7 +253,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/sac_8")
+model.save("Trained Models/sac_9")
 
 # Test and collect data
 env = QubeServo2Env()
