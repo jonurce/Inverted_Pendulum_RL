@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC with POMDP">
-      <change beforePath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SAC Partial Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Partial Observability.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_10/events.out.tfevents.1744024647.ManulabPC.28760.0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_11/events.out.tfevents.1744036625.ManulabPC.35200.0" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -450,7 +449,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744036316902</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Trying SAC with POMDP">
+      <option name="closed" value="true" />
+      <created>1744093175408</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1744093175408</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
