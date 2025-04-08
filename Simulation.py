@@ -30,17 +30,17 @@ times = []
 voltages = []
 
 # Load the trained model
-model = SAC.load("Trained Models/sac_7.zip", device="cpu")
+model = SAC.load("Trained Models/sac_11.zip", device="cpu")
 
 # Initialize state history for frame stacking. Start with arm and pendulum at 0º, zero velocity
-frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0, 0.0])]
+n_frames = 4
+frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0])] * n_frames
 
-def voltage(t, s0, c0, d0, s1, c1, d1):
-    global last_state, dt
+def voltage(t, s0, c0, d0, s1, c1):
     # Current state
     #t0_dot = (arctan2(s0, c0) - arctan2(frame_history[-1][0],frame_history[-1][1])) / dt
     #t1_dot = (arctan2(s1, c1) - arctan2(frame_history[-1][3], frame_history[-1][4])) / dt
-    current_state = np.array([s0, c0, d0, s1, c1, d1], dtype=np.float32)
+    current_state = np.array([s0, c0, d0, s1, c1], dtype=np.float32)
 
     # Update last_state
     frame_history.pop(0)
@@ -62,7 +62,7 @@ def voltage(t, s0, c0, d0, s1, c1, d1):
 def dynamics(t, x):
     s0, c0, d0, s1, c1, d1 = x
 
-    torque = K_m*(voltage(t,s0, c0, d0, s1, c1, d1)-K_m*d0)/R_m
+    torque = K_m*(voltage(t,s0, c0, d0, s1, c1)-K_m*d0)/R_m
 
     #Based on Euler-Lagrange differential equation (original)
     #theta_0 is arm angle ; theta_1 is pendulum angle (0 upwards)
