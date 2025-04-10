@@ -30,10 +30,11 @@ def compute_reward(theta0, theta1, d0, d1):
     downright_closeness = np.exp(-1.0 * theta1**2)
     bonus += -10.0 * downright_closeness * stability_factor
 
+    middle_0 = np.exp(-1.0 * theta0 ** 2)
     stability_0 = np.exp(-1.0 * d0 ** 2)
-    bonus += 5.0 * upright_closeness * stability_0
+    bonus += 10.0 * upright_closeness * stability_0 * stability_factor * middle_0
 
-    limit_distance = np.clip(0.8 - 0.2 *(max_theta_0 - abs(theta0)), 0, 1)
+    limit_distance = np.clip(0.8 - 0.5 *(max_theta_0 - abs(theta0)), 0, 1)
     limit_penalty = -15.0 * limit_distance**3
 
     energy_reward = 2 - 0.15 * abs(m_1 * g * l_1 * (c1 + 1.0) + 0.5 * I_1 * d1**2)
@@ -54,8 +55,8 @@ rewards = compute_reward(theta0, theta1, d0_init, d1_init)
 fig = plt.figure(figsize=(12, 8))
 ax = fig.add_subplot(111, projection='3d')
 surf = ax.plot_surface(theta0, theta1, rewards, cmap='viridis')
-ax.set_xlabel('Theta0 (rad)')
-ax.set_ylabel('Theta1 (rad)')
+ax.set_xlabel(r"$\theta_0$ (rad)")
+ax.set_ylabel(r"$\theta_1$ (rad)")
 ax.set_zlabel('Reward')
 ax.set_title('Reward Function with Velocity Sliders')
 fig.colorbar(surf, shrink=0.5, aspect=5)
@@ -65,10 +66,10 @@ ax.view_init(elev=30, azim=45)
 plt.subplots_adjust(bottom=0.25)
 
 # Add sliders
-ax_d0 = plt.axes([0.25, 0.15, 0.65, 0.03])
-ax_d1 = plt.axes([0.25, 0.10, 0.65, 0.03])
-s_d0 = Slider(ax_d0, 'd0 (rad/s)', -10.0, 10.0, valinit=d0_init)
-s_d1 = Slider(ax_d1, 'd1 (rad/s)', -10.0, 10.0, valinit=d1_init)
+ax_d0 = plt.axes([0.35, 0.15, 0.55, 0.03])
+ax_d1 = plt.axes([0.35, 0.10, 0.55, 0.03])
+s_d0 = Slider(ax_d0, r"$\dot\theta_0$ (rad/s)", -10.0, 10.0, valinit=d0_init)
+s_d1 = Slider(ax_d1, r"$\dot\theta_1$ (rad/s)", -10.0, 10.0, valinit=d1_init)
 
 # Update function
 def update(val):
@@ -77,8 +78,8 @@ def update(val):
     d1 = s_d1.val
     rewards = compute_reward(theta0, theta1, d0, d1)
     ax.plot_surface(theta0, theta1, rewards, cmap='viridis')
-    ax.set_xlabel('Theta0 (rad)')
-    ax.set_ylabel('Theta1 (rad)')
+    ax.set_xlabel(r"$\theta_0$ (rad)")
+    ax.set_ylabel(r"$\theta_1$ (rad)")
     ax.set_zlabel('Reward')
     ax.set_title('Reward Function with Velocity Sliders')
     ax.view_init(elev=30, azim=45)
