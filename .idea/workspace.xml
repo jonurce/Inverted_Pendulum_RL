@@ -5,7 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC with POMDP">
+      <change afterPath="$PROJECT_DIR$/Trained Models/sac_10_new.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_10_new/events.out.tfevents.1744354700.ManulabPC.64044.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_04_2025_11_57_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_06_04_2025_11_57__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_09_43_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_09_43__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_13_32_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_04_2025_13_32__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_6_2025_10_13_AM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_6_2025_10_13_AM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_6_2025_10_21_AM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_6_2025_10_21_AM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC Partial Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Partial Observability.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tensorboard History/SAC_7/events.out.tfevents.1743937310.ManulabPC.48768.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_7/events.out.tfevents.1743937310.ManulabPC.48768.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trained Models/sac_9.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Trained Models/sac_9.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_11/events.out.tfevents.1744036625.ManulabPC.35200.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/0SAC_11/events.out.tfevents.1744036625.ManulabPC.35200.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/0SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_9/events.out.tfevents.1744006778.ManulabPC.52804.0" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,12 +50,12 @@
     &quot;assignee&quot;: &quot;jonurce&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/jonurce/AIS4002_DRL.git",
-    "accountId": "b14262bc-48a4-4017-8abc-9613807c4400"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jonurce/AIS4002_DRL.git&quot;,
+    &quot;accountId&quot;: &quot;b14262bc-48a4-4017-8abc-9613807c4400&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -81,6 +103,7 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\Tensorboard History" />
+      <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\tensorboard_logs" />
     </key>
   </component>
   <component name="RunManager">
@@ -471,7 +494,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744093682123</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Trying SAC with POMDP">
+      <option name="closed" value="true" />
+      <created>1744127532628</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1744127532628</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Trying SAC with POMDP">
+      <option name="closed" value="true" />
+      <created>1744133275621</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1744133275621</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

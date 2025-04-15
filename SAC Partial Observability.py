@@ -19,7 +19,7 @@ class TrainingMonitorCallback(BaseCallback):
         self.check_freq = check_freq
         self.patience = patience
         self.loss_threshold = loss_threshold
-        self.loss_change = 0.005  # Threshold for loss change
+        self.loss_change = 0.0005  # Threshold for loss change
         self.total_losses = []
         self.rewards = []
         self.episode_rewards = []
@@ -118,8 +118,10 @@ class QubeServo2Env(gym.Env):
             for key in self.params:
                 self.params[key] *= np.random.uniform(0.8, 1.2) if key != 'g' else np.random.uniform(0.95, 1.05)
 
-        theta0 = np.random.uniform(-np.pi / 6, np.pi / 6)  # ±30° for arm
-        theta1 = np.random.uniform(-np.pi, np.pi)  # Anywhere for pendulum
+        # theta0 = np.random.uniform(-np.pi / 6, np.pi / 6)  # ±30° for arm
+        # theta1 = np.random.uniform(-np.pi, np.pi)  # Anywhere for pendulum
+        theta0 = 0.0
+        theta1 = 0.0
         self.state = np.array([np.sin(theta0), np.cos(theta0), 0.0, np.sin(theta1), np.cos(theta1)], dtype=np.float32)
         self.d1 = 0.0
         self.step_count = 0
@@ -230,7 +232,7 @@ class QubeServo2Env(gym.Env):
         return self.state, reward, done, truncated, {}
 
 # Train with frame stacking
-n_frames = 3
+n_frames = 5
 env = DummyVecEnv([lambda: QubeServo2Env()])
 env = VecFrameStack(env, n_stack=n_frames)
 
@@ -253,7 +255,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/sac_10")
+model.save("Trained Models/sac_12_new")
 
 # Test and collect data
 env = QubeServo2Env()

@@ -115,8 +115,8 @@ class QubeServo2Env(gym.Env):
         if seed is not None:
             np.random.seed(seed)
             self.params = self.nominal_params.copy()
-            for key in self.params:
-                self.params[key] *= np.random.uniform(0.8, 1.2) if key != 'g' else np.random.uniform(0.95, 1.05)
+            #for key in self.params:
+            #   self.params[key] *= np.random.uniform(0.8, 1.2) if key != 'g' else np.random.uniform(0.95, 1.05)
 
         theta0 = np.random.uniform(-np.pi / 6, np.pi / 6)  # ±30° for arm
         theta1 = np.random.uniform(-np.pi, np.pi)  # Anywhere for pendulum
@@ -253,7 +253,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/sac_7")
+model.save("Trained Models/sac_7_norandom")
 
 # Test and collect data
 env = QubeServo2Env()
