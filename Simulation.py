@@ -30,10 +30,10 @@ times = []
 voltages = []
 
 # Load the trained model
-model = SAC.load("Trained Models/sac_12.zip", device="cpu")
+model = SAC.load("Trained Models/sac_11_new.zip", device="cpu")
 
 # Initialize state history for frame stacking. Start with arm and pendulum at 0º, zero velocity
-n_frames = 5
+n_frames = 4
 frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0])] * n_frames
 
 def voltage(t, s0, c0, d0, s1, c1):
