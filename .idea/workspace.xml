@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC with POMDP">
-      <change beforePath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_04_2025_17_53_[Changes]/sac_7_real_vs_sim.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_04_2025_17_53_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_04_2025_17_53__Changes_.xml" beforeDir="false" />
+    <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying in real pendulum">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QUBE/examples/Python_Serial/Python_Serial.ino" beforeDir="false" afterPath="$PROJECT_DIR$/QUBE/examples/Python_Serial/Python_Serial.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QUBE_PYTHON/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/QUBE_PYTHON/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QUBE_PYTHON/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/QUBE_PYTHON/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +126,7 @@
       <workItem from="1743677380044" duration="7040000" />
       <workItem from="1743838529974" duration="8357000" />
       <workItem from="1743926916377" duration="74000" />
-      <workItem from="1744787106163" duration="9746000" />
+      <workItem from="1744787106163" duration="11571000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -473,7 +464,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744133275621</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Trying in real pendulum">
+      <option name="closed" value="true" />
+      <created>1744797269209</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1744797269209</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Trying in real pendulum">
+      <option name="closed" value="true" />
+      <created>1744797295518</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1744797295518</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -506,7 +513,8 @@
     <MESSAGE value="Tunning reward and enabling cuda" />
     <MESSAGE value="Trying SAC" />
     <MESSAGE value="Trying SAC with POMDP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Trying SAC with POMDP" />
+    <MESSAGE value="Trying in real pendulum" />
+    <option name="LAST_COMMIT_MESSAGE" value="Trying in real pendulum" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Partial_Observability.coverage" NAME="PPO Partial Observability Coverage Results" MODIFIED="1742146749225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -519,7 +527,7 @@
     <SUITE FILE_PATH="coverage/AIS4002_DRL$Reward_Plot.coverage" NAME="Reward Plot Coverage Results" MODIFIED="1743854239694" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$PPO_Full_Observability.coverage" NAME="PPO Full Observability Coverage Results" MODIFIED="1743854390125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/AIS4002_DRL$gui.coverage" NAME="gui Coverage Results" MODIFIED="1744789435334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$control.coverage" NAME="control Coverage Results" MODIFIED="1744796853593" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
-    <SUITE FILE_PATH="coverage/AIS4002_DRL$main.coverage" NAME="main Coverage Results" MODIFIED="1744796985964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$control.coverage" NAME="control Coverage Results" MODIFIED="1744797114747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
+    <SUITE FILE_PATH="coverage/AIS4002_DRL$main.coverage" NAME="main Coverage Results" MODIFIED="1744797172043" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QUBE_PYTHON" />
   </component>
 </project>
