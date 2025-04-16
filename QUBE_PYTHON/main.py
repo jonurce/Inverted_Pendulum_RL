@@ -41,7 +41,7 @@ enableLogging()
 t_last = time()
 
 motor_target = 0
-pendulum_target = 0
+pendulum_target = 180
 rpm_target = 0
 pid = PID()
 
@@ -60,12 +60,13 @@ sim_rpm_data = []
 sim_voltage_time_data = []
 sim_voltage_data = []
 
-run_time = 10
+run_time = 10.0
 
 
 def control(data, lock):
     global motor_target, pendulum_target, rpm_target, pid
     start_time = time()  # Record start time
+
     while True:
         motor_target = MOTOR_TARGET_ANGLE
         pendulum_target = PENDULUM_TARGET_ANGLE
@@ -98,12 +99,13 @@ def control(data, lock):
         current_time = time() - start_time
 
         # Get control signal
-        u = control_system(current_time, dt, motor_degrees, pendulum_degrees, rpm)
+        u = control_system_RL_partial(current_time, dt, motor_degrees, pendulum_degrees, rpm)
 
         # Store data
+        pendulum_degrees = ((pendulum_degrees + 180) % 360) - 180
         real_time_data.append(current_time)
         real_motor_angle_data.append(motor_degrees)
-        real_pendulum_angle_data.append(pendulum_degrees )
+        real_pendulum_angle_data.append(pendulum_degrees)
         real_rpm_data.append(rpm)
         real_voltage_data.append(u)
 
@@ -112,7 +114,8 @@ def control(data, lock):
 
         # Stop after run time
         if current_time >= run_time:
-            qube.setMotorVoltage(0.0)  # Stop the motor
+            qube.setMotorVoltage(0)
+            qube.update()
             break
 
 
@@ -215,7 +218,7 @@ def doMTStuff(data):
     for i, item in enumerate(new_data):
         data[i].append(item)
 
-def plot_results():
+def plot_results_real_vs_simulation():
     # Create subplots for each variable
     fig, axs = plt.subplots(4, 1, figsize=(10, 12), sharex=True)
 
@@ -230,7 +233,8 @@ def plot_results():
     # Pendulum angle
     axs[1].scatter(real_time_data, real_pendulum_angle_data, label="Real", color="blue", marker="o", s=1)
     axs[1].scatter(sim_time_data, sim_pendulum_angle_data, label="Simulation", color="cyan", marker="x", s=1)
-    axs[1].axhline(y=pendulum_target, color='r', linestyle='--', label=r"Target $\theta_1$ ="+f"{pendulum_target}º")
+    axs[1].axhline(y=pendulum_target, color='r', linestyle='--', label=r"Target $\theta_1$ ="+f"+-{pendulum_target}º")
+    axs[1].axhline(y=pendulum_target, color='r', linestyle='--')
     axs[1].set_ylabel("Pendulum Angle (deg)")
     axs[1].legend()
     axs[1].grid(True)
@@ -253,6 +257,39 @@ def plot_results():
     plt.suptitle(f"QUBE: Real vs Simulated Performance (First {run_time} Seconds)")
     plt.show()
 
+def plot_results_real():
+    # Create subplots for each variable
+    fig, axs = plt.subplots(4, 1, figsize=(10, 12), sharex=True)
+
+    # Motor angle
+    axs[0].scatter(real_time_data, real_motor_angle_data, color="blue", marker="o", s=1)
+    axs[0].axhline(y=motor_target, color='r', linestyle='--', label=r"Target $\theta_0$ ="+f"{motor_target}º")
+    axs[0].set_ylabel("Motor Angle (deg)")
+    axs[0].legend()
+    axs[0].grid(True)
+
+    # Pendulum angle
+    axs[1].scatter(real_time_data, real_pendulum_angle_data, color="blue", marker="o", s=1)
+    axs[1].axhline(y=pendulum_target, color='r', linestyle='--', label=r"Target $\theta_1$ =" + f"+-{pendulum_target}º")
+    axs[1].axhline(y=-pendulum_target, color='r', linestyle='--')
+    axs[1].set_ylabel("Pendulum Angle (deg)")
+    axs[1].legend()
+    axs[1].grid(True)
+
+    # RPM
+    axs[2].scatter(real_time_data, real_rpm_data, color="blue", marker="o", s=1)
+    axs[2].set_ylabel("Motor RPM")
+    axs[2].grid(True)
+
+    # Voltage
+    axs[3].scatter(real_time_data, real_voltage_data, color="blue", marker="o", s=1)
+    axs[3].set_xlabel("Time (s)")
+    axs[3].set_ylabel("Voltage (V)")
+    axs[3].grid(True)
+
+    plt.suptitle(f"QUBE: Real Pendulum Performance (First {run_time} Seconds)")
+    plt.show()
+
 
 if __name__ == "__main__":
     try:
@@ -268,10 +305,18 @@ if __name__ == "__main__":
             thread2.join()
             print("Real control finished.")
 
-            #print("Plot closed. Exiting program.")
-            #if not thread1.is_alive():
+            # print("Running simulation...")
+            # simulate()
+            # print("Simulation finished.")
+
+            print("Plotting results...")
+            plot_results_real()
+
+            # print("Plot closed. Exiting program.")
+            # if not thread1.is_alive():
             #    qube.setMotorVoltage(0)
             #    exit()
+            qube.setMotorVoltage(0)
 
         else:
             thread1 = threading.Thread(target=control, args=(_data, lock))
@@ -279,13 +324,6 @@ if __name__ == "__main__":
             thread1.join()
             print("Real control finished.")
 
-        print("Running simulation...")
-        simulate()
-        print("Simulation finished.")
-
-        print("Plotting results...")
-        plot_results()
-
     except:
-        print("UNKNOWN ERROR OCCURRED")
+        print("UNKNOWN ERROR OCCURRED BITCH")
         qube.setMotorVoltage(0)

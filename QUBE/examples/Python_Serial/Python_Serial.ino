@@ -1,3 +1,5 @@
+#include <QUBE.hpp>
+
 #include "QUBE.hpp"
 
 QUBE qube;
