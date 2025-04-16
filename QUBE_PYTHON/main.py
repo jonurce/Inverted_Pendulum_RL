@@ -99,7 +99,10 @@ def control(data, lock):
         current_time = time() - start_time
 
         # Get control signal
-        u = control_system_RL_partial(current_time, dt, motor_degrees, pendulum_degrees, rpm)
+        u = control_system_RL_full(current_time, dt, motor_degrees, pendulum_degrees, rpm)
+
+        if current_time < 0.01:
+            u = 0
 
         # Store data
         pendulum_degrees = ((pendulum_degrees + 180) % 360) - 180
