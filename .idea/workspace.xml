@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Trying SAC with POMDP">
-      <change afterPath="$PROJECT_DIR$/Figures/SAC_12_new.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Trained Models/sac_12_new.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Figures/SAC_7_plot_norandom.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Trained Models/sac_7_norandom.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_7/events.out.tfevents.1744741687.ManulabPC.94120.0" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/0SAC_11/events.out.tfevents.1744036625.ManulabPC.35200.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_11/events.out.tfevents.1744036625.ManulabPC.35200.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/0SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_10/events.out.tfevents.1744205366.ManulabPC.61800.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_10/events.out.tfevents.1744205366.ManulabPC.61800.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_10_new/events.out.tfevents.1744354700.ManulabPC.64044.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_10_new/events.out.tfevents.1744354700.ManulabPC.64044.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_11/events.out.tfevents.1744392090.ManulabPC.73088.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_11_new/events.out.tfevents.1744392090.ManulabPC.73088.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_12/events.out.tfevents.1744700471.ManulabPC.91340.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_12_new/events.out.tfevents.1744700471.ManulabPC.91340.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tensorboard History/SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_7/events.out.tfevents.1743937310.ManulabPC.48768.0" beforeDir="false" afterPath="$PROJECT_DIR$/tensorboard_logs/0SAC_7/events.out.tfevents.1743937310.ManulabPC.48768.0" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,8 +86,8 @@
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\Tensorboard History" />
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\tensorboard_logs" />
+      <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\Tensorboard History" />
     </key>
   </component>
   <component name="RunManager">
@@ -513,7 +510,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744737404817</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Trying SAC with POMDP">
+      <option name="closed" value="true" />
+      <created>1744741646283</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1744741646283</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
