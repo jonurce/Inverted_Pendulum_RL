@@ -15,7 +15,7 @@ MOTOR_TARGET_RPM = 0  # rpm (max 3500)
 
 pid = PID()
 
-model_full = SAC.load("../Trained Models/sac_13.zip", device="cpu")
+model_full = SAC.load("../Trained Models/sac_14.zip", device="cpu")
 last_angle = 0.0
 
 # Main function to control. Must return the voltage (control signal) to apply to the motor.
