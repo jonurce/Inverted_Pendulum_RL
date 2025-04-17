@@ -14,12 +14,12 @@ print(f"Using device: {device}")
 
 
 class TrainingMonitorCallback(BaseCallback):
-    def __init__(self, check_freq=1000, patience=10, loss_threshold=0.01, verbose=1):
+    def __init__(self, check_freq=1000, patience=50, loss_threshold=0.001, verbose=1):
         super(TrainingMonitorCallback, self).__init__(verbose)
         self.check_freq = check_freq
         self.patience = patience
         self.loss_threshold = loss_threshold
-        self.loss_change = 0.005  # Threshold for loss change
+        self.loss_change = 0.0005  # Threshold for loss change
         self.total_losses = []
         self.rewards = []
         self.episode_rewards = []
@@ -115,6 +115,7 @@ class QubeServo2Env(gym.Env):
         if seed is not None:
             np.random.seed(seed)
             self.params = self.nominal_params.copy()
+            self.dt *= np.random.uniform(0.7, 1.3)
             for key in self.params:
                self.params[key] *= np.random.uniform(0.7, 1.3)
 
@@ -253,7 +254,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/sac_13")
+model.save("Trained Models/sac_16")
 
 # Test and collect data
 env = QubeServo2Env()
