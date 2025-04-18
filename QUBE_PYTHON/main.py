@@ -66,7 +66,7 @@ loop_times = []
 
 def control(data, lock):
     global motor_target, pendulum_target, rpm_target, pid
-    desired_freq = 4000
+    desired_freq = 200
     desired_cycle_time = 1 / desired_freq
     start_time = time()  # Record start time
 

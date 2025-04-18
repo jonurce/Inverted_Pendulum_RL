@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d1938f0-fb0d-4bf4-ab31-9ca888a54207" name="Changes" comment="Real pendulum frequency fixed">
-      <change beforePath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AIS4002_DRL.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PPO Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/PPO Full Observability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QUBE_PYTHON/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/QUBE_PYTHON/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QUBE_PYTHON/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/QUBE_PYTHON/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SAC Full Observability.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAC Full Observability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/0SAC_7/events.out.tfevents.1743937310.ManulabPC.48768.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_7/events.out.tfevents.1743937310.ManulabPC.48768.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_12/events.out.tfevents.1744093997.ManulabPC.43536.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_13/events.out.tfevents.1744786964.ManulabPC.77200.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_13/events.out.tfevents.1744786964.ManulabPC.77200.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_16/events.out.tfevents.1744916617.manulab23.34767.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_16/events.out.tfevents.1744916617.manulab23.34767.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_17/events.out.tfevents.1744958983.manulab23.43982.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_17/events.out.tfevents.1744958983.manulab23.43982.0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tensorboard_logs/SAC_7/events.out.tfevents.1744741687.ManulabPC.94120.0" beforeDir="false" afterPath="$PROJECT_DIR$/Tensorboard History/SAC_7_norandom/events.out.tfevents.1744741687.ManulabPC.94120.0" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +80,7 @@
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jonur\Workspace\MECAUT\AIS4002_DRL\Tensorboard History" />
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\Tensorboard History" />
       <recent name="C:\Users\maggi\PycharmProjects\AIS4002_DRL\tensorboard_logs" />
     </key>
@@ -139,14 +128,6 @@
       <workItem from="1743838529974" duration="8357000" />
       <workItem from="1743926916377" duration="74000" />
       <workItem from="1744787106163" duration="13437000" />
-    </task>
-    <task id="LOCAL-00001" summary="Initial Commit">
-      <option name="closed" value="true" />
-      <created>1740998783747</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1740998783747</updated>
     </task>
     <task id="LOCAL-00002" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -532,7 +513,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744967077942</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Real pendulum frequency fixed">
+      <option name="closed" value="true" />
+      <created>1744974293610</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1744974293610</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
