@@ -66,7 +66,7 @@ loop_times = []
 
 def control(data, lock):
     global motor_target, pendulum_target, rpm_target, pid
-    desired_freq = 200
+    desired_freq = 100
     desired_cycle_time = 1 / desired_freq
     start_time = time()  # Record start time
 
@@ -112,7 +112,7 @@ def control(data, lock):
         current_time = time() - start_time
 
         # Get control signal
-        u = control_system_RL_full(current_time, elapsed, motor_degrees, pendulum_degrees, rpm)
+        u = control_system_RL_partial(current_time, elapsed, motor_degrees, pendulum_degrees, rpm)
 
         if current_time < 0.01:
             u = 0
