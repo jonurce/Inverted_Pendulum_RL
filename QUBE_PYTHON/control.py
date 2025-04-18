@@ -15,7 +15,7 @@ MOTOR_TARGET_RPM = 0  # rpm (max 3500)
 
 pid = PID()
 
-model_full = SAC.load("../Trained Models/sac_14.zip", device="cpu")
+model_full = SAC.load("../Trained Models/sac_16.zip", device="cpu")
 last_angle = 0.0
 
 # Main function to control. Must return the voltage (control signal) to apply to the motor.
@@ -35,7 +35,7 @@ def control_system_RL_full(current_time, dt, motor_angle, pendulum_angle, rpm):
     #RPM to rad/s
     d0 = rpm * 2.0 * np.pi / 60.0
 
-    if abs(pendulum_angle - last_angle) < 1e-6 or dt < 1e-6:
+    if abs(pendulum_angle - last_angle) < 0.000001 or dt < 0.000001:
         d1 = 0.0
     else:
         # d1 estimation in rad/s
@@ -53,8 +53,8 @@ def control_system_RL_full(current_time, dt, motor_angle, pendulum_angle, rpm):
     action = np.clip(action[0], -6.0, 6.0)
     return action
 
-model_partial = SAC.load("../Trained Models/sac_8.zip", device="cpu")
-n_frames = 1
+model_partial = SAC.load("../Trained Models/sac_12_new.zip", device="cpu")
+n_frames = 5
 frame_history = [np.array([0.0, 1.0, 0.0, 0.0, 1.0])] * n_frames
 
 def control_system_RL_partial(current_time, dt, motor_angle, pendulum_angle, rpm):

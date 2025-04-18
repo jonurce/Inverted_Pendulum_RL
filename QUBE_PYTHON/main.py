@@ -18,7 +18,7 @@ from logger import *
 from com import *
 from liveplot import *
 from control import *
-from time import time
+from time import time, sleep
 import threading
 
 import numpy as np
@@ -61,13 +61,18 @@ sim_voltage_time_data = []
 sim_voltage_data = []
 
 run_time = 10.0
+loop_times = []
 
 
 def control(data, lock):
     global motor_target, pendulum_target, rpm_target, pid
+    desired_freq = 200
+    desired_cycle_time = 1 / desired_freq
     start_time = time()  # Record start time
 
     while True:
+        loop_start_time = time()
+
         motor_target = MOTOR_TARGET_ANGLE
         pendulum_target = PENDULUM_TARGET_ANGLE
         rpm_target = MOTOR_TARGET_RPM
@@ -87,6 +92,14 @@ def control(data, lock):
         # Get deltatime
         dt = getDT()
 
+        # Check dt to match desired cycle time
+        if dt < desired_cycle_time:
+            sleep(desired_cycle_time - dt)
+            elapsed = time() - loop_start_time
+        else:
+            elapsed = dt
+        loop_times.append(elapsed)
+
         # Set pid parameters using GUI
         setPidParams(pid)
 
@@ -95,11 +108,11 @@ def control(data, lock):
         pendulum_degrees = qube.getPendulumAngle()
         rpm = qube.getMotorRPM()
 
-        #Get current time
+        # Get current time
         current_time = time() - start_time
 
         # Get control signal
-        u = control_system_RL_full(current_time, dt, motor_degrees, pendulum_degrees, rpm)
+        u = control_system_RL_full(current_time, elapsed, motor_degrees, pendulum_degrees, rpm)
 
         if current_time < 0.01:
             u = 0
@@ -120,6 +133,9 @@ def control(data, lock):
             qube.setMotorVoltage(0)
             qube.update()
             break
+
+    print(f"Average Communication Cycle Time: {np.mean(loop_times)} seconds")
+    print(f"Average Communication Frequency: {1/np.mean(loop_times)} Hz")
 
 
 def simulate():
