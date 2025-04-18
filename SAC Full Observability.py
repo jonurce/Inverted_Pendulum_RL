@@ -254,7 +254,7 @@ try:
     model.learn(total_timesteps=2000000, callback=callback)
 except KeyboardInterrupt:
     print("Training interrupted! Model saved")
-model.save("Trained Models/sac_16")
+model.save("Trained Models/delete_me")
 
 # Test and collect data
 env = QubeServo2Env()

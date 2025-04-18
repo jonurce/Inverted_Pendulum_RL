@@ -242,7 +242,7 @@ try:
 except KeyboardInterrupt:
     model.save("pendulum_ppo_interrupted")
     print("Training interrupted! Model saved as 'pendulum_ppo_interrupted.zip'")
-model.save("pendulum_ppo")
+model.save("delete_me")
 
 # Test and collect data
 env = QubeServo2Env()
